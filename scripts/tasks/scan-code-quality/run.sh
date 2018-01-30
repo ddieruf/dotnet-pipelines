@@ -38,6 +38,7 @@ export THIS_FOLDER="$( dirname "${BASH_SOURCE[0]}" )"
 #       Source needed functions
 #######################################
 source "${THIS_FOLDER}/../../functions/dotnet-core.sh --version ${DOTNET_VERSION}"
+source "${THIS_FOLDER}/../../functions/mono.sh"
 source "${THIS_FOLDER}/../../functions/sonar.sh --scanner-version ${SONAR_SCANNER_VERSION} --msbuild-version ${SONAR_SCANNER_MSBUILD_VERSION}"
 
 #######################################

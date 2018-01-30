@@ -5,7 +5,7 @@ set -o errtrace
 
 ROOT_FOLDER="${AGENT_RELEASEDIRECTORY}"
 TASK_SCRIPTS_RESOURCE="task-scripts"
-SRC_VERSION_RESOURCE="log-message-version"
+SRC_VERSION_RESOURCE="src-version"
 
 #######################################
 #       Initialize Task
