@@ -1,0 +1,27 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: ubuntu #djudorange/node-gulp-mocha
+    tag: 16.04 #"latest"
+
+params:
+  ARTIFACTORY_REPO_ID:
+  ARTIFACTORY_TOKEN:
+  ARTIFACTORY_HOST:
+  LOAD_TEST_APP_URL:
+  ARTILLERY_ENVIRONMENT:
+
+inputs:
+  - name: task-scripts
+  - name: concourse-tasks
+  - name: keyval
+
+outputs:
+  - name: keyvalout
+
+run:
+  path: concourse-tasks/load-test/task.sh

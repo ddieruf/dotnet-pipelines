@@ -1,0 +1,28 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: ubuntu #ddieruf/docker-dotnet-sonarscanner
+    tag: 16.04 #latest
+
+params:
+  SONAR_PROJECT_KEY:
+  SONAR_PROJECT_NAME:
+  SONAR_HOST:
+  SONAR_LOGIN_KEY:
+  DOTNET_VERSION:
+
+inputs:
+  - name: src-and-test
+  - name: task-scripts
+  - name: concourse-tasks
+  - name: keyval
+
+outputs:
+  - name: keyvalout
+
+run:
+  path: concourse-tasks/scan-code-quality/task.sh

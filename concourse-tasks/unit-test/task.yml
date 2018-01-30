@@ -1,0 +1,26 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: ubuntu #microsoft/dotnet
+    tag: 16.04 #latest
+
+params:
+  ARTIFACTORY_REPO_ID:
+  ARTIFACTORY_TOKEN:
+  ARTIFACTORY_HOST:
+  APP_UNIT_TEST_DLL_NAME:
+  
+inputs:
+  - name: task-scripts
+  - name: concourse-tasks
+  - name: keyval
+
+outputs:
+  - name: keyvalout
+
+run:
+  path: concourse-tasks/unit-test/task.sh

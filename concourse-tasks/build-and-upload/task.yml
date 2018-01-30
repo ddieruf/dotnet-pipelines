@@ -1,0 +1,34 @@
+---
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: ubuntu #microsoft/dotnet
+    tag: 16.04 #latest
+
+params:
+  ARTIFACTORY_REPO_ID:
+  ARTIFACTORY_TOKEN:
+  ARTIFACTORY_HOST:
+  APP_SRC_CSPROJ_PATH:
+  APP_UNIT_TEST_CSPROJ_PATH:
+  APP_INTEGRATION_TEST_CSPROJ_PATH:
+  APP_SMOKE_TEST_CSPROJ_PATH:
+  CF_MANIFEST_PATH:
+  ARTILLERY_MANIFEST_PATH:
+  DOTNET_VERSION:
+
+inputs:
+  - name: src-and-test
+  - name: task-scripts
+  - name: concourse-tasks
+  - name: keyval
+
+outputs:
+  - name: out
+  - name: keyvalout
+  
+run:
+  path: concourse-tasks/build-and-upload/task.sh
