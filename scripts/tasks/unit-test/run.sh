@@ -10,6 +10,9 @@
 #   UNIT_TEST_ARTIFACT_NAME - the name of the artifact containing the compiled test
 #   UNIT_TEST_DLL_NAME - the resulting dll file name of the project
 #   DOTNET_VERSION
+#   DOTNET_FRAMEWORK
+#   DOTNET_PLATFORM
+#   DOTNET_TEST_LOGGER
 
 set -o errexit
 set -o errtrace
@@ -35,7 +38,8 @@ export TEST_EXTRACT="test-extract"
 #######################################
 #       Source needed functions
 #######################################
-source "${THIS_FOLDER}/../../functions/dotnet-core.sh --version ${DOTNET_VERSION}"
+source "${THIS_FOLDER}/../../functions/dotnet.sh --version ${DOTNET_VERSION}"
+source "${THIS_FOLDER}/../../functions/mono.sh"
 source "${THIS_FOLDER}/../../functions/artifactory.sh"
 
 #######################################
@@ -59,7 +63,11 @@ echo "Retrieving and extracting test artifact"
 downloadAndExtractZipArtifact "${ARTIFACTORY_HOST}" "${ARTIFACTORY_TOKEN}" "${ARTIFACTORY_REPO_ID}" "${UNIT_TEST_ARTIFACT_NAME}" "${THIS_FOLDER}/${TEST_EXTRACT}"
 
 echo "Running unit tests"
-testDotnetCoreProject "${THIS_FOLDER}/${TEST_EXTRACT}/${UNIT_TEST_DLL_NAME}"
+testProject \
+  "${THIS_FOLDER}/${TEST_EXTRACT}/${UNIT_TEST_DLL_NAME}" \
+  "${DOTNET_PLATFORM}" \
+  "${DOTNET_FRAMEWORK}" \
+  "${DOTNET_TEST_LOGGER}"
 
 #######################################
 #       Return result

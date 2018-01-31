@@ -9,7 +9,10 @@
 #   ARTIFACTORY_REPO_ID
 #   INTEGRATION_TEST_ARTIFACT_NAME - the name of the artifact containing the compiled test
 #   INTEGRATION_TEST_DLL_NAME - the resulting dll file name of the project
-#
+#   DOTNET_VERSION
+#   DOTNET_FRAMEWORK
+#   DOTNET_PLATFORM
+#   DOTNET_TEST_LOGGER
 
 set -o errexit
 set -o errtrace
@@ -27,6 +30,10 @@ export TEST_EXTRACT="test-extract"
 [[ ! -z "${ARTIFACTORY_REPO_ID}" ]] || (echo "ARTIFACTORY_REPO_ID is a required value" && exit 1)
 [[ ! -z "${INTEGRATION_TEST_ARTIFACT_NAME}" ]] || (echo "INTEGRATION_TEST_ARTIFACT_NAME is a required value" && exit 1)
 [[ ! -z "${INTEGRATION_TEST_DLL_NAME}" ]] || (echo "INTEGRATION_TEST_DLL_NAME is a required value" && exit 1)
+[[ ! -z "${DOTNET_VERSION}" ]] || (echo "DOTNET_VERSION is a required value" && exit 1)
+[[ ! -z "${DOTNET_FRAMEWORK}" ]] || (echo "DOTNET_FRAMEWORK is a required value" && exit 1)
+[[ ! -z "${DOTNET_PLATFORM}" ]] || (echo "DOTNET_PLATFORM is a required value" && exit 1)
+[[ ! -z "${DOTNET_TEST_LOGGER}" ]] || (echo "DOTNET_TEST_LOGGER is a required value" && exit 1)
 
 #######################################
 #       Install required programs
@@ -35,7 +42,8 @@ export TEST_EXTRACT="test-extract"
 #######################################
 #       Source needed functions
 #######################################
-source "${THIS_FOLDER}/../../functions/dotnet-core.sh --version ${DOTNET_VERSION}"
+source "${THIS_FOLDER}/../../functions/dotnet.sh --version ${DOTNET_VERSION}"
+source "${THIS_FOLDER}/../../functions/mono.sh"
 source "${THIS_FOLDER}/../../functions/artifactory.sh"
 
 #######################################
@@ -59,7 +67,11 @@ echo "Retrieving and extracting test artifact"
 downloadAndExtractZipArtifact "${ARTIFACTORY_HOST}" "${ARTIFACTORY_TOKEN}" "${ARTIFACTORY_REPO_ID}" "${INTEGRATION_TEST_ARTIFACT_NAME}" "${THIS_FOLDER}/${TEST_EXTRACT}"
 
 echo "Running unit tests"
-testDotnetCoreProject "${THIS_FOLDER}/${TEST_EXTRACT}/${INTEGRATION_TEST_DLL_NAME}"
+testProject \
+  "${THIS_FOLDER}/${TEST_EXTRACT}/${INTEGRATION_TEST_DLL_NAME}" \
+  "${DOTNET_PLATFORM}" \
+  "${DOTNET_FRAMEWORK}" \
+  "${DOTNET_TEST_LOGGER}"
 
 #######################################
 #       Return result

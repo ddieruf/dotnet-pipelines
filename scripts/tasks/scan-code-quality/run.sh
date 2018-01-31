@@ -12,6 +12,8 @@
 #   SONAR_HOST
 #   SONAR_LOGIN_KEY
 #   DOTNET_VERSION
+#   DOTNET_FRAMEWORK
+#   DOTNET_RUNTIME_ID
 #   SONAR_SCANNER_VERSION
 #   SONAR_SCANNER_MSBUILD_VERSION
 #   SONAR_TIMEOUT_SECONDS
@@ -31,6 +33,8 @@ export THIS_FOLDER="$( dirname "${BASH_SOURCE[0]}" )"
 [[ ! -z "${SONAR_LOGIN_KEY}" ]] || (echo "SONAR_LOGIN_KEY is a required value" && exit 1)
 [[ ! -z "${SONAR_PROJECT_NAME}" ]] || (echo "SONAR_PROJECT_NAME is a required value" && exit 1)
 [[ ! -z "${SONAR_TIMEOUT_SECONDS}" ]] || (echo "SONAR_TIMEOUT_SECONDS is a required value" && exit 1)
+[[ ! -z "${DOTNET_VERSION}" ]] || (echo "DOTNET_VERSION is a required value" && exit 1)
+[[ ! -z "${DOTNET_RUNTIME_ID}" ]] || (echo "DOTNET_RUNTIME_ID is a required value" && exit 1)
 
 [[ -d "${SRC_AND_TEST_ROOT}" ]] || (echo "SRC_AND_TEST_ROOT path invalid [${SRC_AND_TEST_ROOT}]" && exit 1)
 
@@ -57,15 +61,18 @@ fi
 
 cd "${SRC_AND_TEST_ROOT}" || exit
 
-dotnetClean
+cleanSolution
 
 beginMSBuildScanner "${SONAR_HOST}" \
   "${SONAR_LOGIN_KEY}" \
   "${SONAR_PROJECT_KEY}" \
   "${SONAR_PROJECT_NAME}" \
-  "${PIPELINE_VERSION}"
+  "${PIPELINE_VERSION}" 
 
-buildEntireDotnetCoreSolution
+buildSolution \
+  "${DOTNET_FRAMEWORK}" \
+  "${DOTNET_RUNTIME_ID}" \
+  "release"
 
 endMSBuildScanner "${SONAR_LOGIN_KEY}"
 

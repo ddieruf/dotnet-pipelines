@@ -15,6 +15,8 @@
 #   CF_MANIFEST_PATH
 #   ARTILLERY_MANIFEST_PATH
 #   DOTNET_VERSION
+#   DOTNET_FRAMEWORK
+#   DOTNET_RUNTIME_ID
 #
 # Output Globals:
 #   SRC_ARTIFACT_NAME
@@ -43,6 +45,8 @@ export OUTPUT_FOLDER="out"
 [[ ! -z "${APP_SMOKE_TEST_CSPROJ_PATH}" ]] || (echo "APP_SMOKE_TEST_CSPROJ_PATH is a required value" && exit 1)
 [[ ! -z "${CF_MANIFEST_PATH}" ]] || (echo "CF_MANIFEST_PATH is a required value" && exit 1)
 [[ ! -z "${ARTILLERY_MANIFEST_PATH}" ]] || (echo "ARTILLERY_MANIFEST_PATH is a required value" && exit 1)
+[[ ! -z "${DOTNET_FRAMEWORK}" ]] || (echo "DOTNET_FRAMEWORK is a required value" && exit 1)
+[[ ! -z "${DOTNET_RUNTIME_ID}" ]] || (echo "DOTNET_RUNTIME_ID is a required value" && exit 1)
 
 [[ -f "${APP_SRC_CSPROJ_PATH}" ]] || (echo "APP_SRC_CSPROJ_PATH path invalid [${APP_SRC_CSPROJ_PATH}]" && exit 1)
 [[ -f "${APP_UNIT_TEST_CSPROJ_PATH}" ]] || (echo "APP_UNIT_TEST_CSPROJ_PATH path invalid [${APP_UNIT_TEST_CSPROJ_PATH}]" && exit 1)
@@ -59,7 +63,8 @@ export OUTPUT_FOLDER="out"
 #######################################
 #       Source needed functions
 #######################################
-source "${THIS_FOLDER}/../../functions/dotnet-core.sh --version ${DOTNET_VERSION}"
+source "${THIS_FOLDER}/../../functions/dotnet.sh --version ${DOTNET_VERSION}"
+source "${THIS_FOLDER}/../../functions/mono.sh"
 source "${THIS_FOLDER}/../../functions/artifactory.sh"
 
 #######################################
@@ -71,6 +76,8 @@ mkdir "${THIS_FOLDER}/${OUTPUT_FOLDER}" || exit 1
 #######################################
 #       Begin task
 #######################################
+export FrameworkPathOverride=/usr/lib/mono/4.5/
+
 function buildAndUpload(){
   local csprojPath="${1}"
   local pipelineVersion="${2}"
@@ -78,11 +85,11 @@ function buildAndUpload(){
 
   local artifactName="${pipelineVersion//./_}-${artifactNameSuffix}.zip"
 
-  publishDotnetCoreProject \
-    "Release" \
-    "netcoreapp2.0" \
+  publishProject \
+    "release" \
+    "${DOTNET_FRAMEWORK}" \
     "${THIS_FOLDER}/${PUBLISH_DIR}" \
-    "ubuntu-x64" \
+    "${DOTNET_RUNTIME_ID}" \
     "${csprojPath}"
 
   #include files in the publish result, so it will be a part of artifact
