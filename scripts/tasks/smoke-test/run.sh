@@ -49,7 +49,7 @@ fi
 #######################################
 #       Source needed functions
 #######################################
-source "${THIS_FOLDER}/../../functions/dotnet.sh --version ${DOTNET_VERSION}"
+source "${THIS_FOLDER}/../../functions/dotnet.sh" --version ${DOTNET_VERSION}
 source "${THIS_FOLDER}/../../functions/mono.sh"
 source "${THIS_FOLDER}/../../functions/artifactory.sh"
 

@@ -9,9 +9,10 @@ function install(){
     ca-certificates-mono \
     referenceassemblies-pcl \
     mono-xsp4
-
+  
 	return 0
 }
 
 command -v mono >/dev/null 2>&1 || install
+export FrameworkPathOverride=/usr/lib/mono/4.5/ #direct all dotnet commands to use this library
 echo "mono version: $(mono --version)"

@@ -63,7 +63,7 @@ export OUTPUT_FOLDER="out"
 #######################################
 #       Source needed functions
 #######################################
-source "${THIS_FOLDER}/../../functions/dotnet.sh --version ${DOTNET_VERSION}"
+source "${THIS_FOLDER}/../../functions/dotnet.sh" --version ${DOTNET_VERSION}
 source "${THIS_FOLDER}/../../functions/mono.sh"
 source "${THIS_FOLDER}/../../functions/artifactory.sh"
 
@@ -76,8 +76,6 @@ mkdir "${THIS_FOLDER}/${OUTPUT_FOLDER}" || exit 1
 #######################################
 #       Begin task
 #######################################
-export FrameworkPathOverride=/usr/lib/mono/4.5/
-
 function buildAndUpload(){
   local csprojPath="${1}"
   local pipelineVersion="${2}"
