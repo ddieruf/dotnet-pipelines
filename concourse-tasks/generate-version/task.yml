@@ -5,11 +5,9 @@ image_resource:
   type: docker-image
   source:
     repository: ubuntu
-    tag: xenial
+    tag: 16.04
 
 params:
-  GIT_EMAIL:
-  GIT_NAME:
 
 inputs:
   - name: task-scripts
@@ -18,7 +16,6 @@ inputs:
   - name: keyval
 
 outputs:
-  - name: updated-version
   - name: keyvalout
 
 run:

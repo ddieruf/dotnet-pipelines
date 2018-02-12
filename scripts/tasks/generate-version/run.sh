@@ -17,8 +17,6 @@ THIS_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 #       Validate required globals
 #######################################
 [[ ! -z "${VERSION_ROOT}" ]] || (echo "VERSION_ROOT is a required value" && exit 1)
-[[ ! -z "${GIT_EMAIL}" ]] || (echo "GIT_EMAIL is a required value" && exit 1)
-[[ ! -z "${GIT_NAME}" ]] || (echo "GIT_NAME is a required value" && exit 1)
 
 [[ ! -f "${VERSION_ROOT}" ]] || (echo "VERSION_ROOT path invalid [${VERSION_ROOT}]" && exit 1)
 
@@ -60,7 +58,6 @@ fi
 # ie: if the current version is 0.0.5 and you want to bump the major version,
 #   change the file to be 1.0.0 and the next pipeline push will be 1.0.1
 newVersion="${currentVersion%.*}.$((${currentVersion##*.}+1))" #bump patch version by 1
-echo "${newVersion}" > "${VERSION_ROOT}/version"
 
 #######################################
 #       Return result

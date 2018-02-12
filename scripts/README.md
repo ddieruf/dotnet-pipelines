@@ -4,15 +4,14 @@ This is where the magic happens...
 
 ## Getting Started
 
-I have created a sample project that has all the fixin's. You can use this to provide your pipeline and a;; it's prerequisits.
-[Example Project](https://github.com/ddieruf/log-message)
+The scripts area is where the work of each task can be found. Within this folder you have two subfolders:
 
-### Prerequisites
+#### /functions
 
-A pipeline definition using these scripts
+This folder holds specific functions to a given technology. An example is the cf.sh file is a collection of functions 
+used for interacting with a Cloud Foundry platform.
 
-### Installing
+#### /tasks
 
-
-## Deployment
-
+This folder holds a subfolder for each pipeline task. Within that child folder a single run.sh script can be found. This is 
+the task script to be executed. Each task script documents the assumed globals that should be established before running, as well as globals that are set during the tasks execution that will be relavant in other tasks.

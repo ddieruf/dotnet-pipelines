@@ -33,17 +33,12 @@ export TEST_EXTRACT="test-extract"
 [[ ! -z "${DOTNET_VERSION}" ]] || (echo "DOTNET_VERSION is a required value" && exit 1)
 [[ ! -z "${DOTNET_FRAMEWORK}" ]] || (echo "DOTNET_FRAMEWORK is a required value" && exit 1)
 [[ ! -z "${DOTNET_PLATFORM}" ]] || (echo "DOTNET_PLATFORM is a required value" && exit 1)
-[[ ! -z "${DOTNET_TEST_LOGGER}" ]] || (echo "DOTNET_TEST_LOGGER is a required value" && exit 1)
-
-#######################################
-#       Install required programs
-#######################################
 
 #######################################
 #       Source needed functions
 #######################################
 source "${THIS_FOLDER}/../../functions/dotnet.sh" --version ${DOTNET_VERSION}
-source "${THIS_FOLDER}/../../functions/mono.sh"
+#source "${THIS_FOLDER}/../../functions/mono.sh"
 source "${THIS_FOLDER}/../../functions/artifactory.sh"
 
 #######################################
@@ -55,16 +50,12 @@ mkdir "${THIS_FOLDER}/${TEST_EXTRACT}" || exit 1
 #######################################
 #       Begin task
 #######################################
-#now that the required dependencies are installed, one last test
-urlstatus=$(curl -o /dev/null --silent --head --write-out '%{http_code}' "${ARTIFACTORY_HOST}" )
-#allow 302 becuase of the redirect artifactory could do
-if [[ ${urlstatus} -ne 200 && ${urlstatus} -ne 302 ]]; then
-  echo "ERROR: Artifactory host could not be reached [${ARTIFACTORY_HOST}][${urlstatus}]"
-  exit 1
-fi
-
 echo "Retrieving and extracting test artifact"
 downloadAndExtractZipArtifact "${ARTIFACTORY_HOST}" "${ARTIFACTORY_TOKEN}" "${ARTIFACTORY_REPO_ID}" "${INTEGRATION_TEST_ARTIFACT_NAME}" "${THIS_FOLDER}/${TEST_EXTRACT}"
+if [[ $? -eq 1 ]]; then
+  echo "ERROR: downloadAndExtractZipArtifact"
+  exit 1
+fi
 
 echo "Running unit tests"
 testProject \
@@ -72,6 +63,10 @@ testProject \
   "${DOTNET_PLATFORM}" \
   "${DOTNET_FRAMEWORK}" \
   "${DOTNET_TEST_LOGGER}"
+if [[ $? -eq 1 ]]; then
+  echo "ERROR: testProject"
+  exit 1
+fi
 
 #######################################
 #       Return result

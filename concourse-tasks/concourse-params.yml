@@ -1,0 +1,63 @@
+
+# GIT INFO
+git-email: ""
+git-name: ""
+src-and-test-url: "" #The GIT address to the app solution repo
+src-and-test-branch: "" #Branch name that holds app source and test code
+task-scripts-url: "https://github.com/ddieruf/dotnet-pipelines.git"
+task-scripts-branch: 0.0.1 #Branch name that holds the task bash scripts
+concourse-tasks-url: "https://github.com/ddieruf/dotnet-pipelines.git"
+concourse-tasks-branch: 0.0.1 #Branch name that holds the concourse task definition
+github-private-key: ""
+
+####################
+
+#ARTIFACTORY INFO
+artifactory-repo-id: "" #The identifying key of the Artifactory repo associated with the solution
+articatory-host: "" #The URL to access aartifactory
+artifactory-token: "" #https://www.jfrog.com/confluence/display/RTF/Access+Tokens#AccessTokens-UsingTokens
+
+#SONARQUBE INFO
+sonar-project-key: "" #The identifying key of the SonarQube project associated with the solution
+sonar-project-name: "" #The name of the SonarQube project associated with the solution
+sonar-host: "" #The URL to access SonarQube
+sonar-login-key: "" #https://docs.sonarqube.org/display/SONAR/User+Token
+sonar-scanner-version: 3.0.3.778
+sonar-msbuild-version: 4.0.2.892
+sonar-timeout-seconds: 240 #the time, in seconds, Sonar Qube should wait for a quality gate report
+
+#DOTNET CORE INFO
+dotnet-version: 2.0.3 #https://github.com/dotnet/core/releases
+dotnet-framework: "" #https://docs.microsoft.com/en-us/dotnet/standard/frameworks
+dotnet-runtime-id: "" #https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
+dotnet-platform: "" #https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
+dotnet-test-logger: "" #https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-vstest
+
+#DOTNET SOLUTION INFO
+src-csproj-location-in-solution: "Src/My-Project/MyProject.csproj" #From the sln file, the location of the app source code project file
+unit-test-csproj-location-in-solution: "Test/My-Project.UnitTests/MyProject.UnitTests.csproj" #From the sln file, the location of the app unit test project file
+integration-test-location-in-solution: "Test/My-Project.IntegrationTests/MyProject.IntegrationTests.csproj" #From the sln file, the location of the app integration test project file
+smoke-test-csproj-location-in-solution: "Test/My-Project.SmokeTests/MyProject.SmokeTests.csproj" #From the sln file, the location of the app smoke test project file
+unit-test-dll-name: "MyProject.UnitTests.dll" #The dll name of the unit test project
+integration-test-dll-name: "MyProject.IntegrationTests.dll" #The dll name of the integration test project
+smoke-test-dll-name: "MyProject.SmokeTests.dll" #The dll name of the smoke test project
+
+#CLOUD FOUNDRY INFO
+cf-cli-version: 6.34.1 #https://github.com/cloudfoundry/cli/releases
+cf-stage-manifest-location-in-solution: "Ci/cf-stage.yml" #From the sln file, the location of the staging cf manifest
+cf-stage-api-url: "" #Cloud Foundry api URL for staging environment
+cf-stage-username: "" #Cloud Foundry username for staging environment
+cf-stage-password: "" #Cloud Foundry password for staging environment
+cf-stage-org: "" #Cloud Foundry staging org for the app
+cf-stage-space: "" #Cloud Foundry staging space for the app
+
+cf-prod-manifest-location-in-solution: "Ci/cf-prod.yml"
+cf-prod-api-url: "" #Cloud Foundry api URL for production environment
+cf-prod-username: "" #Cloud Foundry username for production environment
+cf-prod-password: "" #Cloud Foundry password for production environment
+cf-prod-org: "" #Cloud Foundry production org for the app
+cf-prod-space: "" #Cloud Foundry production space for the app
+
+#ARTILLERY INFO
+artillery-environment: "" #https://artillery.io/docs/script-reference/
+artillery-manifest-location-in-solution: "Ci/artillery.yml" #From the sln file, the location of the artillery manifest

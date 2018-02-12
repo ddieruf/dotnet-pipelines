@@ -17,7 +17,7 @@ source "${ROOT_FOLDER}/${CONCOURSE_TASKS_RESOURCE}/functions/init-task.sh"
 #######################################
 #       Run Task
 #######################################
-export APP_URL="${PASSED_STAGE_APP_URLS}"
+export APP_URL="${PASSED_STAGE_APP_ROUTE}"
 #ARTILLERY_ENVIRONMENT
 #ARTIFACTORY_HOST
 #ARTIFACTORY_TOKEN

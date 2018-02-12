@@ -8,6 +8,8 @@
 #	ie: export DOTNET_VERSION=2.x.x
 #
 
+exec 5>&1
+
 ######################################
 # Description:
 # 	Install the dotnet core runtime and SDK
@@ -42,6 +44,7 @@ function install(){
 		zlib1g \
 		libicu55 \
 		curl \
+		openssl \
 		apt-transport-https
 
 	source $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/dotnet-install.sh \
@@ -80,12 +83,20 @@ function publishProject(){
 	#prepare the app to be published and output to provided publish dir
 	# dotnet publish output is realative to the bin directory created during build, if an absolute path is not provided
 	# dotnet restore will happen automatically
-	dotnet publish \
-		--configuration "${configuration}" \
-		--framework "${framework}" \
-		--output "${artifactDirPath}" \
-		--runtime "${runtime}" \
-		"${csprojFilePath}"
+	if [[ -z "${runtime}" ]]; then #do not include the dotnet runtime with publish result
+		dotnet publish \
+			--configuration "${configuration}" \
+			--framework "${framework}" \
+			--output "${artifactDirPath}" \
+			"${csprojFilePath}"
+	else
+		dotnet publish \
+			--configuration "${configuration}" \
+			--framework "${framework}" \
+			--output "${artifactDirPath}" \
+			--runtime "${runtime}" \
+			"${csprojFilePath}"
+	fi
 	
 	return 0
 }
@@ -107,8 +118,8 @@ function publishProject(){
 function testProject(){
 	local testAppDllPath="${1}"
 	local platform="${2}"
-	local framework="${3}" 
-	local logger="${4:-""}"
+	local framework="${3}" #for future use
+	local logger="${4}"
 
 	echo "Discovered tests"
 	dotnet vstest "${testAppDllPath}" --ListTests 
@@ -116,12 +127,14 @@ function testProject(){
 	echo "-----------------------------------------------"
 
 	echo "Running dotnet vstest [${testAppDllPath}]"
-	dotnet vstest \
-		--platform "${platform}"
-		--framework "${framework}"
-		--logger ${logger} \
-		"${testAppDllPath}"
-	
+	if [[ -z "${logger}" ]]; then
+		dotnet vstest "${testAppDllPath}" \
+			--platform:"${platform}"
+	else
+		dotnet vstest "${testAppDllPath}" \
+			--platform:"${platform}" \
+			--logger:${logger}
+	fi
 	return 0
 }
 #######################################
@@ -196,10 +209,6 @@ do
 				shift
 				cli_telemetry_output=$1
 				;;
-		*)
-				say_err "Unknown argument \`$name\`"
-				exit 1
-				;;
 	esac
 
 	shift
@@ -207,4 +216,6 @@ done
 
 #INITIALIZE THE LIBRARY - if not installed
 command -v dotnet >/dev/null 2>&1 || install
-echo "dotnet version: $(dotnet --version)"
+ret=$(echo "dotnet version: $(dotnet --info)"|tee >(cat - >&5))
+basePath=$(grep -i "Base Path:" <<< "${ret}" | sed 's/^.*: //')
+#export FrameworkPathOverride=/usr/lib/mono/4.5/ #direct all dotnet commands to use this library

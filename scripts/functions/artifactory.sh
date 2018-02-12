@@ -43,6 +43,12 @@ function downloadAppArtifact() {
 	local artifactoryApiKey="${3}"
 	local artifactFileName="${4}"
 
+	testHost "${artifactoryHost}"
+	if [[ $? -eq 1 ]]; then
+		echo "ERROR: testHost"
+		return 1
+	fi
+	
 	local targetFolderUrl="${artifactoryHost}/${artifactoryRepoName}"
 
 	(curl \
@@ -70,6 +76,12 @@ function uploadAppArtifact() {
 	local artifactoryHost="${2}"
 	local artifactoryRepoName="${3}"
 	local artifactoryAPIKey="${4}"
+
+	testHost "${artifactoryHost}"
+	if [[ $? -eq 1 ]]; then
+		echo "ERROR: testHost"
+		return 1
+	fi
 
 	local targetFolderUrl="${artifactoryHost}/${artifactoryRepoName}"
 	echo "Validating archive to artifactory"
@@ -154,6 +166,7 @@ function extractAppArtifact(){
 	local destinationPath="${3}"
 	
 	echo "Using app artifact [${artifactPath}] at [${destinationPath}]"
+
 	case "$artifactType" in
     "zip")
 			unzip "${artifactPath}" -d "${destinationPath}"
@@ -191,16 +204,22 @@ function downloadAndExtractZipArtifact(){
 	local artifactFileName="${4}"
 	local extractToDirPath="${5}"
 	
+	testHost "${artifactoryHost}"
+	if [[ $? -eq 1 ]]; then
+		echo "ERROR: testHost"
+		return 1
+	fi
+	
 	#download the zip to PWD
 	downloadAppArtifact "${artifactoryHost}" "${artifactoryAPIKey}" "${artifactoryRepoId}" "${artifactFileName}"
-	if [[ $?==1 ]]; then
+	if [[ $? -eq 1 ]]; then
 		echo "ERROR: downloadAppArtifact"
 		return 1
 	fi
 
 	#extract the zip
 	extractAppArtifact "zip" "${artifactFileName}" "${extractToDirPath}"
-	if [[ $?==1 ]]; then
+	if [[ $? -eq 1 ]]; then
 		echo "ERROR: extractAppArtifact"
 		return 1
 	fi
@@ -231,15 +250,46 @@ function createAndUploadAppArtifact(){
 	local artifactoryRepoId="${5}"
 	local artifactoryAPIKey="${6}"
 
+	testHost "${artifactoryHost}"
+	if [[ $? -eq 1 ]]; then
+		echo "ERROR: testHost"
+		return 1
+	fi
+
 	createAppArtifact "${artifactType}" "${appSrcPath}" "${artifactPath}"
-	if [[ $?==1 ]]; then
-		echo "ERROR: createAppArtifact"
+	if [[ $? -eq 1 ]]; then
+		echo "ERROR: createAppArtifact $?"
 		return 1
 	fi
 
 	uploadAppArtifact "${artifactPath}" "${artifactoryHost}" "${artifactoryRepoId}" "${artifactoryAPIKey}"
-	if [[ $?==1 ]]; then
+	if [[ $? -eq 1 ]]; then
 		echo "ERROR: uploadAppArtifact"
+		return 1
+	fi
+
+	return 0
+}
+
+######################################
+# Description:
+# 	Confirm the provided host URL is reachable
+# Globals:
+#   None
+# Arguments:
+#		1 - ArtifactoryHost: URL to server ie: http://artifactory.domain.com:8081/artifactory
+# Returns:
+#   0: success
+#   1: error
+#######################################
+function testHost(){
+	local artifactoryHost="${1}"
+
+	#now that the required dependencies are installed
+	urlstatus=$(curl -o /dev/null --silent --head --write-out '%{http_code}' "${artifactoryHost}" )
+	#allow 302 becuase of the redirect artifactory could do
+	if [[ ${urlstatus} -ne 200 && ${urlstatus} -ne 302 ]]; then
+		echo "ERROR: Artifactory host could not be reached [${artifactoryHost}][${urlstatus}]"
 		return 1
 	fi
 

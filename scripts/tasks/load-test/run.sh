@@ -28,22 +28,11 @@ export ARTIFACT_EXTRACT="artifact-extract"
 [[ ! -z "${ARTIFACTORY_REPO_ID}" ]] || (echo "ARTIFACTORY_REPO_ID is a required value" && exit 1)
 [[ ! -z "${SRC_ARTIFACT_NAME}" ]] || (echo "SRC_ARTIFACT_NAME is a required value" && exit 1)
 
-urlstatus=$(curl -o /dev/null --silent --head --write-out '%{http_code}' "${APP_URL}" )
-if [[ ${urlstatus} -ne 200 ]]; then
-  echo "ERROR: App url could not be reached [${APP_URL}][${urlstatus}]"
-  exit 1
-fi
-
-#######################################
-#       Install required programs
-#######################################
-
-
 #######################################
 #       Source needed functions
 #######################################
-source "${THIS_FOLDER}/../../functions/artifactory.sh"
 source "${THIS_FOLDER}/../../functions/artillery.sh"
+source "${THIS_FOLDER}/../../functions/artifactory.sh"
 
 #######################################
 #       Setup temporary directories
@@ -53,14 +42,6 @@ mkdir "${THIS_FOLDER}/${ARTIFACT_EXTRACT}" || exit 1
 #######################################
 #       Begin task
 #######################################
-#now that the required dependencies are installed, one last test
-urlstatus=$(curl -o /dev/null --silent --head --write-out '%{http_code}' "${ARTIFACTORY_HOST}" )
-#allow 302 becuase of the redirect artifactory could do
-if [[ ${urlstatus} -ne 200 && ${urlstatus} -ne 302 ]]; then
-  echo "ERROR: Artifactory host could not be reached [${ARTIFACTORY_HOST}][${urlstatus}]"
-  exit 1
-fi
-
 echo "Retrieving and extracting src artifact"
 downloadAndExtractZipArtifact "${ARTIFACTORY_HOST}" "${ARTIFACTORY_TOKEN}" "${ARTIFACTORY_REPO_ID}" "${SRC_ARTIFACT_NAME}" "${THIS_FOLDER}/${ARTIFACT_EXTRACT}"
 

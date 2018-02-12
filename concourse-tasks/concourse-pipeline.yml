@@ -1,0 +1,299 @@
+---
+resources:
+- name: src-and-test
+  type: git
+  source:
+    uri: ((src-and-test-url))
+    branch: ((src-and-test-branch))
+    private_key: ((github-private-key))
+
+- name: src-version
+  type: git
+  source:
+    uri: ((src-and-test-url))
+    branch: version
+    private_key: ((github-private-key))
+
+- name: task-scripts
+  type: git
+  source:
+    uri: ((task-scripts-url))
+    branch: ((task-scripts-branch))
+
+- name: concourse-tasks
+  type: git
+  source:
+    uri: ((concourse-tasks-url))
+    branch: ((concourse-tasks-branch))
+
+- name: keyval
+  type: keyval
+
+resource_types:
+  - name: keyval
+    type: docker-image
+    source:
+      repository: swce/keyval-resource
+
+jobs:
+- name: initialize-pipeline
+  plan:
+  - aggregate:
+    - get: task-scripts
+    - get: concourse-tasks
+    - get: keyval
+  - task: initialize-pipeline
+    privileged: true
+    file: concourse-tasks/initialize-pipeline/task.yml
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: generate-version
+  serial: true
+  plan:
+  - aggregate:
+    - get: task-scripts
+    - get: concourse-tasks
+    - get: src-version
+    - get: keyval
+      passed:
+        - initialize-pipeline
+      trigger: true
+  - task: generate-version
+    file: concourse-tasks/generate-version/task.yml
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: scan-code-quality
+  serial: true
+  plan:
+  - aggregate:
+    - get: task-scripts
+    - get: concourse-tasks
+    - get: src-and-test
+    - get: keyval
+      passed:
+        - generate-version
+      trigger: true
+  - task: scan-code-quality
+    file: concourse-tasks/scan-code-quality/task.yml
+    params:
+      <<: *dotnet-core-params
+      <<: *sonar-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: build-and-upload
+  serial: true
+  plan:
+  - aggregate:
+    - get: task-scripts
+    - get: concourse-tasks
+    - get: src-and-test
+    - get: keyval
+      passed:
+        - scan-code-quality
+      trigger: true
+  - task: build-and-upload
+    file: concourse-tasks/build-and-upload/task.yml
+    params:
+      <<: *dotnet-solution-params
+      <<: *dotnet-core-params
+      <<: *artifactory-params
+      <<: *cloud-foundry-params
+  - put: repo
+    params:
+      repository: out
+      tag: out/tag
+      only_tag: true
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: unit-test
+  serial: true
+  plan:
+  - aggregate:
+    - get: task-scripts
+    - get: concourse-tasks
+    - get: keyval
+      passed:
+        -  build-and-upload
+      trigger: true
+  - task: unit-test
+    file: concourse-tasks/unit-test/task.yml
+    params:
+      <<: *dotnet-solution-params
+      <<: *artifactory-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: integration-test
+  serial: true
+  plan:
+  - aggregate:
+    - get: task-scripts
+    - get: concourse-tasks
+    - get: keyval
+      passed:
+        - unit-test
+      trigger: true
+  - task: integration-test
+    file: concourse-tasks/integration-test/task.yml
+    params:
+      <<: *dotnet-solution-params
+      <<: *artifactory-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: push-to-cf-stage
+  serial: true
+  plan:
+  - aggregate:
+    - get: task-scripts
+    - get: concourse-tasks
+    - get: keyval
+      passed:
+        - integration-test
+      trigger: true
+  - task: push-to-cf-stage
+    file: concourse-tasks/push-to-cf-stage/task.yml
+    params:
+      <<: *artifactory-params
+      <<: *cloud-foundry-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: smoke-test
+  serial: true
+  plan:
+  - aggregate:
+    - get: task-scripts
+    - get: concourse-tasks
+    - get: keyval
+      passed:
+        - push-to-cf-stage
+      trigger: true
+  - task: smoke-test
+    file: concourse-tasks/smoke-test/task.yml
+    params:
+      <<: *dotnet-solution-params
+      <<: *artifactory-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: load-test
+  serial: true
+  plan:
+  - aggregate:
+    - get: task-scripts
+    - get: concourse-tasks
+    - get: keyval
+      passed:
+        - smoke-test
+      trigger: true
+  - task: smoke-test
+    file: concourse-tasks/load-test/task.yml
+    params:
+      <<: *artillery-params
+      <<: *artifactory-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: push-to-cf-prod
+  serial: true
+  plan:
+  - aggregate:
+    - get: task-scripts
+    - get: concourse-tasks
+    - get: keyval
+      passed:
+        - load-test
+      trigger: true
+  - task: push-to-cf-prod
+    file: concourse-tasks/push-to-cf-prod/task.yml
+    params:
+      <<: *artifactory-params
+      <<: *cloud-foundry-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+- name: finalize-pipeline
+  serial: true
+  plan:
+  - aggregrate:
+    - get: concourse-tasks
+    - get: keyval
+    - get: src-version
+      passed:
+        - push-to-cf-prod
+  - task: finalize-pipeline
+    file: concourse-tasks/finalize-pipeline/task.yml
+  - put: src-version-out
+    params:
+      repository: src-version
+
+##########
+
+git-params: &git-params
+  GIT_EMAIL: ((git-email))
+  GIT_NAME: ((git-name))
+
+dotnet-core-params: &dotnet-core-params
+  DOTNET_VERSION: ((dotnet-version))
+  DOTNET_FRAMEWORK: ((dotnet-framework))
+  DOTNET_RUNTIME_ID: ((dotnet-runtime-id))
+  DOTNET_PLATFORM: ((dotnet-platform))
+  DOTNET_TEST_LOGGER: ((dotnet-logger))
+
+sonar-params: &sonar-params
+  SONAR_PROJECT_KEY: ((sonar-project-key))
+  SONAR_PROJECT_NAME: ((sonar-project-name))
+  SONAR_HOST: ((sonar-host))
+  SONAR_LOGIN_KEY: ((sonar-login-key))
+  SONAR_SCANNER_VERSION: ((sonar-scanner-version)
+  SONAR_SCANNER_MSBUILD_VERSION: ((sonar-msbuild-version))
+  SONAR_TIMEOUT_SECONDS: ((sonar-timeout-seconds))
+  
+dotnet-solution-params: &dotnet-solution-params
+  SRC_CSPROJ_LOCATION_IN_SOLUTION: ((src-csproj-location-in-solution))0
+  UNIT_TEST_CSPROJ_LOCATION_IN_SOLUTION: ((unit-test-csproj-location-in-solution))
+  INTEGRATION_TEST_CSPROJ_LOCATION_IN_SOLUTION: ((integration-test-location-in-solution))
+  SMOKE_TEST_CSPROJ_LOCATION_IN_SOLUTION: ((smoke-test-csproj-location-in-solution))
+  UNIT_TEST_DLL_NAME: ((unit-test-dll-name))
+  INTEGRATION_TEST_DLL_NAME: ((integration-test-dll-name))
+  SMOKE_TEST_DLL_NAME: ((smoke-test-dll-name))
+  CF_MANIFEST_LOCATION_IN_SOLUTION: ((manifest-location-in-solution))
+  ARTILLERY_MANIFEST_LOCATION_IN_SOLTUION: ((artillery-manifest-location-in-solution))
+
+artifactory-params: &artifactory-params
+  ARTIFACTORY_REPO_ID: ((artifactory-repo-id))
+  ARTIFACTORY_HOST: ((articatory-host))
+  ARTIFACTORY_TOKEN: ((artifactory-token))
+
+cloud-foundry-params: &cloud-foundry-params
+  CF_CLI_VERSION: ((cf-cli-version))
+  CF_STAGE_MANIFEST_LOCATION: ((cf-stage-manifest-location-in-solution))
+  CF_STAGE_API_URL: ((cf-stage-api-url))
+  CF_STAGE_ORG: ((cf-stage-org))
+  CF_STAGE_SPACE: ((cf-stage-space))
+  CF_STAGE_USERNAME: ((cf-stage-username))
+  CF_STAGE_PASSWORD: ((cf-stage-password))
+
+  CF_PROD_MANIFEST_LOCATION: ((cf-prod-manifest-location-in-solution))
+  CF_PROD_API_URL: ((cf-prod-api-url))
+  CF_PROD_ORG: ((cf-prod-org))
+  CF_PROD_SPACE: ((cf-prod-space))
+  CF_PROD_USERNAME: ((cf-prod-username))
+  CF_PROD_PASSWORD: ((cf-prod-password))
+
+artillery-params: &artillery-params
+  ARTILLERY_ENVIRONMENT: ((artillery-environment))

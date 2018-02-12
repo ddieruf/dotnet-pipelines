@@ -4,10 +4,10 @@ set -o errexit
 set -o errtrace
 
 ROOT_FOLDER="$( pwd )"
-TASK_SCRIPTS_RESOURCE=task-scripts
 CONCOURSE_TASKS_RESOURCE=concourse-tasks
 KEYVAL_RESOURCE=keyval
-KEYVALOUTPUT_RESOURCE=keyvalout
+VERSION_SRC_OUT_RESOURCE=src-version-out
+SRC_VERSION_RESOURCE=src-version
 
 #######################################
 #       Initialize Task
@@ -17,14 +17,13 @@ source "${ROOT_FOLDER}/${CONCOURSE_TASKS_RESOURCE}/functions/init-task.sh"
 #######################################
 #       Run Task
 #######################################
-#ARTIFACTORY_HOST
-#ARTIFACTORY_TOKEN
-#ARTIFACTORY_REPO_ID
-#UNIT_TEST_DLL_NAME
-export UNIT_TEST_ARTIFACT_NAME="${PASSED_UNIT_TEST_ARTIFACT_NAME}"
-source "${ROOT_FOLDER}/${TASK_SCRIPTS_RESOURCE}/tasks/unit-test/run.sh"
+
+cp -R "${ROOT_FOLDER}/${SRC_VERSION_RESOURCE}/." "${ROOT_FOLDER}/${VERSION_SRC_OUT_RESOURCE}/"
+
+pushd "${ROOT_FOLDER}/${VERSION_SRC_OUT_RESOURCE}"
+  echo "${PASSED_PIPELINE_VERSION}" > version
+popd
 
 #######################################
 #       Finalize task
 #######################################
-source "${ROOT_FOLDER}/${CONCOURSE_TASKS_RESOURCE}/functions/finish-task.sh"

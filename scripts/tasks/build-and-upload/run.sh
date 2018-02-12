@@ -12,7 +12,8 @@
 #   APP_INTEGRATION_TEST_CSPROJ_PATH
 #   APP_SMOKE_TEST_CSPROJ_PATH
 #   PIPELINE_VERSION
-#   CF_MANIFEST_PATH
+#   CF_STAGE_MANIFEST_PATH
+#   CF_PROD_MANIFEST_PATH
 #   ARTILLERY_MANIFEST_PATH
 #   DOTNET_VERSION
 #   DOTNET_FRAMEWORK
@@ -43,28 +44,25 @@ export OUTPUT_FOLDER="out"
 [[ ! -z "${APP_UNIT_TEST_CSPROJ_PATH}" ]] || (echo "APP_UNIT_TEST_CSPROJ_PATH is a required value" && exit 1)
 [[ ! -z "${APP_INTEGRATION_TEST_CSPROJ_PATH}" ]] || (echo "APP_INTEGRATION_TEST_CSPROJ_PATH is a required value" && exit 1)
 [[ ! -z "${APP_SMOKE_TEST_CSPROJ_PATH}" ]] || (echo "APP_SMOKE_TEST_CSPROJ_PATH is a required value" && exit 1)
-[[ ! -z "${CF_MANIFEST_PATH}" ]] || (echo "CF_MANIFEST_PATH is a required value" && exit 1)
+[[ ! -z "${CF_STAGE_MANIFEST_PATH}" ]] || (echo "CF_STAGE_MANIFEST_PATH is a required value" && exit 1)
+[[ ! -z "${CF_PROD_MANIFEST_PATH}" ]] || (echo "CF_PROD_MANIFEST_PATH is a required value" && exit 1)
 [[ ! -z "${ARTILLERY_MANIFEST_PATH}" ]] || (echo "ARTILLERY_MANIFEST_PATH is a required value" && exit 1)
 [[ ! -z "${DOTNET_FRAMEWORK}" ]] || (echo "DOTNET_FRAMEWORK is a required value" && exit 1)
-[[ ! -z "${DOTNET_RUNTIME_ID}" ]] || (echo "DOTNET_RUNTIME_ID is a required value" && exit 1)
+[[ ! -z "${DOTNET_VERSION}" ]] || (echo "DOTNET_VERSION is a required value" && exit 1)
 
 [[ -f "${APP_SRC_CSPROJ_PATH}" ]] || (echo "APP_SRC_CSPROJ_PATH path invalid [${APP_SRC_CSPROJ_PATH}]" && exit 1)
 [[ -f "${APP_UNIT_TEST_CSPROJ_PATH}" ]] || (echo "APP_UNIT_TEST_CSPROJ_PATH path invalid [${APP_UNIT_TEST_CSPROJ_PATH}]" && exit 1)
 [[ -f "${APP_INTEGRATION_TEST_CSPROJ_PATH}" ]] || (echo "APP_INTEGRATION_TEST_CSPROJ_PATH path invalid [${APP_INTEGRATION_TEST_CSPROJ_PATH}]" && exit 1)
 [[ -f "${APP_SMOKE_TEST_CSPROJ_PATH}" ]] || (echo "APP_SMOKE_TEST_CSPROJ_PATH path invalid [${APP_SMOKE_TEST_CSPROJ_PATH}]" && exit 1)
-[[ -f "${CF_MANIFEST_PATH}" ]] || (echo "CF_MANIFEST_PATH path invalid [${CF_MANIFEST_PATH}]" && exit 1)
+[[ -f "${CF_STAGE_MANIFEST_PATH}" ]] || (echo "CF_STAGE_MANIFEST_PATH path invalid [${CF_STAGE_MANIFEST_PATH}]" && exit 1)
+[[ -f "${CF_PROD_MANIFEST_PATH}" ]] || (echo "CF_PROD_MANIFEST_PATH path invalid [${CF_PROD_MANIFEST_PATH}]" && exit 1)
 [[ -f "${ARTILLERY_MANIFEST_PATH}" ]] || (echo "ARTILLERY_MANIFEST_PATH path invalid [${ARTILLERY_MANIFEST_PATH}]" && exit 1)
-
-#######################################
-#       Install required programs
-#######################################
-
 
 #######################################
 #       Source needed functions
 #######################################
 source "${THIS_FOLDER}/../../functions/dotnet.sh" --version ${DOTNET_VERSION}
-source "${THIS_FOLDER}/../../functions/mono.sh"
+#source "${THIS_FOLDER}/../../functions/mono.sh" #mono is used to FrameworkPathOverride in dotnet.sh
 source "${THIS_FOLDER}/../../functions/artifactory.sh"
 
 #######################################
@@ -90,12 +88,6 @@ function buildAndUpload(){
     "${DOTNET_RUNTIME_ID}" \
     "${csprojPath}"
 
-  #include files in the publish result, so it will be a part of artifact
-  for i in "${fileArray[@]}"; do
-    #echo "$i >-> ${THIS_FOLDER}/${PUBLISH_DIR}"
-    cp "${i}" "${THIS_FOLDER}/${PUBLISH_DIR}" || return 1
-  done
-
   createAndUploadAppArtifact \
     "zip" \
     "${THIS_FOLDER}/${PUBLISH_DIR}" \
@@ -108,17 +100,12 @@ function buildAndUpload(){
   return 0
 }
 
-#now that the required dependencies are installed, one last test
-urlstatus=$(curl -o /dev/null --silent --head --write-out '%{http_code}' "${ARTIFACTORY_HOST}" )
-#allow 302 becuase of the redirect artifactory could do
-if [[ ${urlstatus} -ne 200 && ${urlstatus} -ne 302 ]]; then
-  echo "ERROR: Artifactory host could not be reached [${ARTIFACTORY_HOST}][${urlstatus}]"
-  exit 1
-fi
-
 echo "Build and upload the project src"
 echo "--------------------------------------------------------"
-fileArray=("${CF_MANIFEST_PATH}" "${ARTILLERY_MANIFEST_PATH}")
+cp "${CF_STAGE_MANIFEST_PATH}" "${THIS_FOLDER}/${PUBLISH_DIR}/cf-stage-manifest.yml" || exit 1
+cp "${CF_PROD_MANIFEST_PATH}" "${THIS_FOLDER}/${PUBLISH_DIR}/cf-prod-manifest.yml" || exit 1
+cp "${ARTILLERY_MANIFEST_PATH}" "${THIS_FOLDER}/${PUBLISH_DIR}" || exit 1
+
 buildAndUpload "${APP_SRC_CSPROJ_PATH}" "${PIPELINE_VERSION}" "src"
 if [[ $? -eq 1 ]]; then
   echo "ERROR: buildAndUpload src:\n${ret}"
@@ -131,7 +118,6 @@ fi
 
 echo "Build and upload the project unit-test"
 echo "--------------------------------------------------------"
-fileArray=()
 buildAndUpload "${APP_UNIT_TEST_CSPROJ_PATH}" "${PIPELINE_VERSION}" "unit-test"
 if [[ $? -eq 1 ]]; then
   echo "ERROR: buildAndUpload unit-test:\n${ret}"
@@ -144,7 +130,6 @@ fi
 
 echo "Build and upload the project integration-test"
 echo "--------------------------------------------------------"
-fileArray=()
 buildAndUpload "${APP_INTEGRATION_TEST_CSPROJ_PATH}" "${PIPELINE_VERSION}" "integration-test"
 if [[ $? -eq 1 ]]; then
   echo "ERROR: buildAndUpload integration-test:\n${ret}"
@@ -157,7 +142,6 @@ fi
 
 echo "Build and upload the project smoke-test"
 echo "--------------------------------------------------------"
-fileArray=()
 buildAndUpload "${APP_SMOKE_TEST_CSPROJ_PATH}" "${PIPELINE_VERSION}" "smoke-test"
 if [[ $? -eq 1 ]]; then
   echo "ERROR: buildAndUpload smoke-test:\n${ret}"

@@ -34,7 +34,10 @@ export THIS_FOLDER="$( dirname "${BASH_SOURCE[0]}" )"
 [[ ! -z "${SONAR_PROJECT_NAME}" ]] || (echo "SONAR_PROJECT_NAME is a required value" && exit 1)
 [[ ! -z "${SONAR_TIMEOUT_SECONDS}" ]] || (echo "SONAR_TIMEOUT_SECONDS is a required value" && exit 1)
 [[ ! -z "${DOTNET_VERSION}" ]] || (echo "DOTNET_VERSION is a required value" && exit 1)
-[[ ! -z "${DOTNET_RUNTIME_ID}" ]] || (echo "DOTNET_RUNTIME_ID is a required value" && exit 1)
+[[ ! -z "${SONAR_SCANNER_MSBUILD_VERSION}" ]] || (echo "SONAR_SCANNER_MSBUILD_VERSION is a required value" && exit 1)
+[[ ! -z "${SONAR_SCANNER_VERSION}" ]] || (echo "SONAR_SCANNER_VERSION is a required value" && exit 1)
+[[ ! -z "${DOTNET_FRAMEWORK}" ]] || (echo "DOTNET_FRAMEWORK is a required value" && exit 1)
+[[ ! -z "${SONAR_PROJECT_KEY}" ]] || (echo "SONAR_PROJECT_KEY is a required value" && exit 1)
 
 [[ -d "${SRC_AND_TEST_ROOT}" ]] || (echo "SRC_AND_TEST_ROOT path invalid [${SRC_AND_TEST_ROOT}]" && exit 1)
 

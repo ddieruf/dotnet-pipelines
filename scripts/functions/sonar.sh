@@ -39,7 +39,7 @@ function installSonar(){
     unzip \
     jq
 
-  wget https://github.com/SonarSource/sonar-scanner-msbuild/releases/download/${scanner-msbuild-version}/sonar-scanner-msbuild-${scanner-msbuild-version}.zip -O /opt/sonar-scanner-msbuild.zip
+  wget https://github.com/SonarSource/sonar-scanner-msbuild/releases/download/${scanner_msbuild_version}/sonar-scanner-msbuild-${scanner_msbuild_version}.zip -O /opt/sonar-scanner-msbuild.zip
   
   mkdir -p ${homeDir}
   unzip /opt/sonar-scanner-msbuild.zip -d ${homeDir}
@@ -48,7 +48,7 @@ function installSonar(){
   chmod 775 ${homeDir}/**/bin/*
   chmod 775 ${homeDir}/**/lib/*.jar
 
-  PATH="${homeDir}:${homeDir}/sonar-scanner-${scanner-version}/bin:${PATH}"
+  PATH="${homeDir}:${homeDir}/sonar-scanner-${scanner_version}/bin:${PATH}"
 
 	return 0
 }
@@ -200,24 +200,20 @@ function checkQualityGate(){
   return ${return_code}
 }
 
-scanner-msbuild-version=""
-scanner-version=""
+scanner_msbuild_version=""
+scanner_version=""
 
 while [ $# -ne 0 ]
 do
 	name="$1"
 	case "$name" in
-		--scanner-msbuild-version|-[Ss]canner[Mm]sbuild[Vv]ersion)
+		--msbuild-version|-[Mm]sbuild[Vv]ersion)
 				shift
-				scanner-msbuild-version="$1"
+				scanner_msbuild_version="${1}"
 				;;
 		--scanner-version|-[Ss]canner-[Vv]ersion)
 				shift
-				scanner-version="$1"
-				;;
-		*)
-				say_err "Unknown argument \`$name\`"
-				exit 1
+				scanner_version="${1}"
 				;;
 	esac
 

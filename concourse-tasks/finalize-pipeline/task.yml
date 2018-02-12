@@ -8,12 +8,12 @@ image_resource:
     tag: 16.04
 
 inputs:
-  - name: task-scripts
   - name: concourse-tasks
+  - name: src-version
   - name: keyval
 
 outputs:
-  - name: keyvalout
+  - name: src-version-out
 
 run:
-  path: concourse-tasks/initialize-pipeline/task.sh
+  path: concourse-tasks/finalize-pipeline/task.sh

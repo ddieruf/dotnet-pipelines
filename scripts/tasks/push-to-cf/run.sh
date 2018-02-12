@@ -4,8 +4,7 @@
 #   Gien an app artifact saved in artifactory, retrieve it, extract it, and push to cf
 # 
 # Required Globals:
-#   APP_NAME - 
-#   PIPELINE_VERSION - 
+#   PIPELINE_VERSION
 #   ARTIFACTORY_HOST
 #   ARTIFACTORY_TOKEN
 #   ARTIFACTORY_REPO_ID
@@ -15,22 +14,23 @@
 #   CF_ORG
 #   CF_SPACE
 #   CF_API_URL
+#   CF_CLI_VERSION
+#   ENVIRONMENT_NAME - stage|prod
 #
 # Output Globals:
-#   APP_ROUTE - 
-#   APP_URLS - 
+#   APP_ROUTES
+#   APP_NAME
 
 set -o errexit
 set -o errtrace
 
 export ROOT_FOLDER="$( pwd )"
 export THIS_FOLDER="$( dirname "${BASH_SOURCE[0]}" )"
-export ARTIFACT_EXTRACT="artifact-extract"
+export TEST_EXTRACT="test-extract"
 
 #######################################
 #       Validate required globals
 #######################################
-[[ ! -z "${APP_NAME}" ]] || (echo "APP_NAME is a required value" && exit 1)
 [[ ! -z "${CF_USERNAME}" ]] || (echo "CF_USERNAME is a required value" && exit 1)
 [[ ! -z "${CF_PASSWORD}" ]] || (echo "CF_PASSWORD is a required value" && exit 1)
 [[ ! -z "${CF_ORG}" ]] || (echo "CF_ORG is a required value" && exit 1)
@@ -41,37 +41,29 @@ export ARTIFACT_EXTRACT="artifact-extract"
 [[ ! -z "${ARTIFACTORY_TOKEN}" ]] || (echo "ARTIFACTORY_TOKEN is a required value" && exit 1)
 [[ ! -z "${ARTIFACTORY_REPO_ID}" ]] || (echo "ARTIFACTORY_REPO_ID is a required value" && exit 1)
 [[ ! -z "${SRC_ARTIFACT_NAME}" ]] || (echo "SRC_ARTIFACT_NAME is a required value" && exit 1)
-
-#######################################
-#       Install required programs
-#######################################
+[[ ! -z "${CF_CLI_VERSION}" ]] || (echo "CF_CLI_VERSION is a required value" && exit 1)
+[[ ! -z "${ENVIRONMENT_NAME}" ]] || (echo "ENVIRONMENT_NAME is a required value" && exit 1)
 
 #######################################
 #       Source needed functions
 #######################################
-source "${THIS_FOLDER}/../../functions/cf.sh"
 source "${THIS_FOLDER}/../../functions/artifactory.sh"
+source "${THIS_FOLDER}/../../functions/cf.sh" --version ${CF_CLI_VERSION}
 
 #######################################
 #       Setup temporary directories
 #######################################
-mkdir "${THIS_FOLDER}/${ARTIFACT_EXTRACT}" || exit 1
+mkdir "${THIS_FOLDER}/${TEST_EXTRACT}" || exit 1
 
 #######################################
 #       Begin task
 #######################################
-#now that the required dependencies are installed, one last test
-urlstatus=$(curl -o /dev/null --silent --head --write-out '%{http_code}' "${ARTIFACTORY_HOST}" )
-#allow 302 becuase of the redirect artifactory could do
-if [[ ${urlstatus} -ne 200 && ${urlstatus} -ne 302 ]]; then
-  echo "ERROR: Artifactory host could not be reached [${ARTIFACTORY_HOST}][${urlstatus}]"
+echo "Retrieving and extracting src artifact"
+downloadAndExtractZipArtifact "${ARTIFACTORY_HOST}" "${ARTIFACTORY_TOKEN}" "${ARTIFACTORY_REPO_ID}" "${SRC_ARTIFACT_NAME}" "${THIS_FOLDER}/${TEST_EXTRACT}"
+if [[ $? -eq 1 ]]; then
+  echo "ERROR: downloadAndExtractZipArtifact"
   exit 1
 fi
-
-appName="${APP_NAME}-${PIPELINE_VERSION}"
-
-echo "Retrieving and extracting artifact"
-downloadAndExtractZipArtifact "${ARTIFACTORY_HOST}" "${ARTIFACTORY_REPO_ID}" "${ARTIFACTORY_TOKEN}" "${SRC_ARTIFACT_NAME}" "${THIS_FOLDER}/${ARTIFACT_EXTRACT}"
 
 echo "Logging into cloud foundry"
 logInToPaas \
@@ -80,16 +72,16 @@ logInToPaas \
   "${CF_ORG}" \
   "${CF_SPACE}" \
   "${CF_API_URL}"
-if [[ $?==1 ]]; then
+if [[ $? -eq 1 ]]; then
   echo "ERROR: logInToPaas"
   exit 1
 fi
 
 echo "Pushing app to cloud foundry"
-cd "${THIS_FOLDER}/${ARTIFACT_EXTRACT}" || exit
+cd "${THIS_FOLDER}/${TEST_EXTRACT}" || exit
 
-deploy "${appName}"
-if [[ $?==1 ]]; then
+deploy "${ENVIRONMENT_NAME}" "${PIPELINE_VERSION}"
+if [[ $? -eq 1 ]]; then
   echo "ERROR: deploy"
   exit 1
 fi
