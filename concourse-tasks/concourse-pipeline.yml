@@ -229,7 +229,7 @@ jobs:
 - name: finalize-pipeline
   serial: true
   plan:
-  - aggregrate:
+  - aggregate:
     - get: concourse-tasks
     - get: keyval
     - get: src-version
