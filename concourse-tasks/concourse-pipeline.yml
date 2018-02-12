@@ -104,11 +104,6 @@ jobs:
       <<: *dotnet-core-params
       <<: *artifactory-params
       <<: *cloud-foundry-params
-  - put: repo
-    params:
-      repository: out
-      tag: out/tag
-      only_tag: true
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -231,15 +226,16 @@ jobs:
   plan:
   - aggregate:
     - get: concourse-tasks
-    - get: keyval
     - get: src-version
+    - get: keyval
       passed:
         - push-to-cf-prod
+      trigger: true
   - task: finalize-pipeline
     file: concourse-tasks/finalize-pipeline/task.yml
-  - put: src-version-out
+  - put: src-version
     params:
-      repository: src-version
+      repository: src-version-out
 
 ##########
 
