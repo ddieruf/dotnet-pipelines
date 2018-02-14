@@ -8,8 +8,9 @@ image_resource:
     tag: 16.04
 
 inputs:
-  - name: task-scripts
   - name: concourse-tasks
+  - name: task-scripts
+  - name: src-and-test
 
 outputs:
   - name: keyvalout
