@@ -1,4 +1,11 @@
 ---
+resource_types:
+  - name: keyval
+    type: docker-image
+    source:
+      repository: swce/keyval-resource
+      tag: latest
+
 resources:
 - name: src-and-test
   type: git
@@ -29,21 +36,15 @@ resources:
 - name: keyval
   type: keyval
 
-resource_types:
-  - name: keyval
-    type: docker-image
-    source:
-      repository: swce/keyval-resource
-
 jobs:
 - name: initialize-pipeline
   plan:
   - aggregate:
     - get: task-scripts
     - get: concourse-tasks
-    - get: keyval
+    - get: src-and-test
+      trigger: true
   - task: initialize-pipeline
-    privileged: true
     file: concourse-tasks/initialize-pipeline/task.yml
   - put: keyval
     params:
@@ -53,50 +54,52 @@ jobs:
   serial: true
   plan:
   - aggregate:
+    - get: keyval
     - get: task-scripts
     - get: concourse-tasks
     - get: src-version
-    - get: keyval
+    - get: src-and-test
+      trigger: true
       passed:
         - initialize-pipeline
-      trigger: true
   - task: generate-version
     file: concourse-tasks/generate-version/task.yml
   - put: keyval
     params:
       file: keyvalout/keyval.properties
 
-- name: scan-code-quality
-  serial: true
-  plan:
-  - aggregate:
-    - get: task-scripts
-    - get: concourse-tasks
-    - get: src-and-test
-    - get: keyval
-      passed:
-        - generate-version
-      trigger: true
-  - task: scan-code-quality
-    file: concourse-tasks/scan-code-quality/task.yml
-    params:
-      <<: *dotnet-core-params
-      <<: *sonar-params
-  - put: keyval
-    params:
-      file: keyvalout/keyval.properties
+#- name: scan-code-quality
+#  serial: true
+#  plan:
+#  - aggregate:
+#    - get: keyval
+#    - get: task-scripts
+#    - get: concourse-tasks
+#    - get: src-and-test
+#      trigger: true
+#      passed:
+#        - generate-version
+#      trigger: true
+#  - task: scan-code-quality
+#    file: concourse-tasks/scan-code-quality/task.yml
+#    params:
+#      <<: *dotnet-core-params
+#      <<: *sonar-params
+#  - put: keyval
+#    params:
+#      file: keyvalout/keyval.properties
 
 - name: build-and-upload
   serial: true
   plan:
   - aggregate:
+    - get: keyval
     - get: task-scripts
     - get: concourse-tasks
     - get: src-and-test
-    - get: keyval
-      passed:
-        - scan-code-quality
       trigger: true
+      passed:
+        - generate-version
   - task: build-and-upload
     file: concourse-tasks/build-and-upload/task.yml
     params:
@@ -112,12 +115,13 @@ jobs:
   serial: true
   plan:
   - aggregate:
+    - get: keyval
     - get: task-scripts
     - get: concourse-tasks
-    - get: keyval
+    - get: src-and-test
+      trigger: true
       passed:
         -  build-and-upload
-      trigger: true
   - task: unit-test
     file: concourse-tasks/unit-test/task.yml
     params:
@@ -131,12 +135,13 @@ jobs:
   serial: true
   plan:
   - aggregate:
+    - get: keyval
     - get: task-scripts
     - get: concourse-tasks
-    - get: keyval
+    - get: src-and-test
+      trigger: true
       passed:
         - unit-test
-      trigger: true
   - task: integration-test
     file: concourse-tasks/integration-test/task.yml
     params:
@@ -150,12 +155,13 @@ jobs:
   serial: true
   plan:
   - aggregate:
+    - get: keyval
     - get: task-scripts
     - get: concourse-tasks
-    - get: keyval
+    - get: src-and-test
+      trigger: true
       passed:
         - integration-test
-      trigger: true
   - task: push-to-cf-stage
     file: concourse-tasks/push-to-cf-stage/task.yml
     params:
@@ -169,12 +175,13 @@ jobs:
   serial: true
   plan:
   - aggregate:
+    - get: keyval
     - get: task-scripts
     - get: concourse-tasks
-    - get: keyval
+    - get: src-and-test
+      trigger: true
       passed:
         - push-to-cf-stage
-      trigger: true
   - task: smoke-test
     file: concourse-tasks/smoke-test/task.yml
     params:
@@ -188,12 +195,13 @@ jobs:
   serial: true
   plan:
   - aggregate:
+    - get: keyval
     - get: task-scripts
     - get: concourse-tasks
-    - get: keyval
+    - get: src-and-test
+      trigger: true
       passed:
         - smoke-test
-      trigger: true
   - task: smoke-test
     file: concourse-tasks/load-test/task.yml
     params:
@@ -207,12 +215,13 @@ jobs:
   serial: true
   plan:
   - aggregate:
+    - get: keyval
     - get: task-scripts
     - get: concourse-tasks
-    - get: keyval
+    - get: src-and-test
+      trigger: true
       passed:
         - load-test
-      trigger: true
   - task: push-to-cf-prod
     file: concourse-tasks/push-to-cf-prod/task.yml
     params:
@@ -292,4 +301,3 @@ cloud-foundry-params: &cloud-foundry-params
   CF_PROD_PASSWORD: ((cf-prod-password))
 
 artillery-params: &artillery-params
-  ARTILLERY_ENVIRONMENT: ((artillery-environment))

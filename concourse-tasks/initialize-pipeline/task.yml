@@ -10,7 +10,6 @@ image_resource:
 inputs:
   - name: task-scripts
   - name: concourse-tasks
-  - name: keyval
 
 outputs:
   - name: keyvalout
