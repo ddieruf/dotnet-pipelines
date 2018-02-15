@@ -20,12 +20,11 @@ params:
   CF_CLI_VERSION:
 
 inputs:
-  - name: task-scripts
-  - name: concourse-tasks
+  - name: dotnet-pipelines
   - name: keyval
 
 outputs:
   - name: keyvalout
 
 run:
-  path: concourse-tasks/push-to-cf-prod/task.sh
+  path: dotnet-pipelines/concourse-tasks/push-to-cf-prod/task.sh

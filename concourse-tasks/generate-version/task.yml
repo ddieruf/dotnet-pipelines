@@ -18,4 +18,4 @@ outputs:
   - name: keyvalout
 
 run:
-  path: concourse-tasks/generate-version/task.sh
+  path: dotnet-pipelines/concourse-tasks/generate-version/task.sh

@@ -8,7 +8,7 @@ image_resource:
     tag: 16.04
 
 inputs:
-  - name: concourse-tasks
+  - name: dotnet-pipelines
   - name: src-version
   - name: keyval
 
@@ -16,4 +16,4 @@ outputs:
   - name: src-version-out
 
 run:
-  path: concourse-tasks/finalize-pipeline/task.sh
+  path: dotnet-pipelines/concourse-tasks/finalize-pipeline/task.sh

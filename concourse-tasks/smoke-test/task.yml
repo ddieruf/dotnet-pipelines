@@ -20,12 +20,11 @@ params:
   DOTNET_TEST_LOGGER:
 
 inputs:
-  - name: task-scripts
-  - name: concourse-tasks
+  - name: dotnet-pipelines
   - name: keyval
 
 outputs:
   - name: keyvalout
 
 run:
-  path: concourse-tasks/smoke-test/task.sh
+  path: dotnet-pipelines/concourse-tasks/smoke-test/task.sh

@@ -4,7 +4,8 @@ set -o errexit
 set -o errtrace
 
 ROOT_FOLDER="$( pwd )"
-CONCOURSE_TASKS_RESOURCE=concourse-tasks
+PIPELINE_RESOURCE=dotnet-pipelines
+CONCOURSE_TASKS_RESOURCE="${PIPELINE_RESOURCE}/concourse-tasks"
 KEYVAL_RESOURCE=keyval
 VERSION_SRC_OUT_RESOURCE=src-version-out
 SRC_VERSION_RESOURCE=src-version

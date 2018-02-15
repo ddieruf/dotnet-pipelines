@@ -27,8 +27,7 @@ params:
 
 inputs:
   - name: src-and-test
-  - name: task-scripts
-  - name: concourse-tasks
+  - name: dotnet-pipelines
   - name: keyval
 
 outputs:
@@ -36,4 +35,4 @@ outputs:
   - name: keyvalout
   
 run:
-  path: concourse-tasks/build-and-upload/task.sh
+  path: dotnet-pipelines/concourse-tasks/build-and-upload/task.sh
