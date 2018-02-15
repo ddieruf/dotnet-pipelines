@@ -8,12 +8,11 @@ image_resource:
     tag: 16.04
 
 inputs:
-  - name: concourse-tasks
-  - name: task-scripts
+  - name: dotnet-pipelines
   - name: src-and-test
 
 outputs:
   - name: keyvalout
 
 run:
-  path: concourse-tasks/initialize-pipeline/task.sh
+  path: dotnet-pipelines/concourse-tasks/initialize-pipeline/task.sh

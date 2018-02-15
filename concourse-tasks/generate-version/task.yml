@@ -10,8 +10,7 @@ image_resource:
 params:
 
 inputs:
-  - name: task-scripts
-  - name: concourse-tasks
+  - name: dotnet-pipelines
   - name: src-version
   - name: keyval
 
