@@ -265,7 +265,7 @@ dotnet-solution-params: &dotnet-solution-params
   SMOKE_TEST_DLL_NAME: ((smoke-test-dll-name))
   CF_STAGE_MANIFEST_LOCATION: ((cf-stage-manifest-location-in-solution))
   CF_PROD_MANIFEST_LOCATION: ((cf-prod-manifest-location-in-solution))
-  ARTILLERY_MANIFEST_PATH: ((artillery-manifest-location-in-solution))
+  ARTILLERY_MANIFEST_LOCATION: ((artillery-manifest-location-in-solution))
 
 artifactory-params: &artifactory-params
   ARTIFACTORY_REPO_ID: ((artifactory-repo-id))
