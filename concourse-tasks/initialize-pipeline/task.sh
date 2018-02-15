@@ -7,7 +7,6 @@ ROOT_FOLDER="$( pwd )"
 PIPELINE_RESOURCE=dotnet-pipelines
 TASK_SCRIPTS_RESOURCE="${PIPELINE_RESOURCE}/scripts"
 CONCOURSE_TASKS_RESOURCE="${PIPELINE_RESOURCE}/concourse-tasks"
-KEYVAL_RESOURCE=keyval
 KEYVALOUTPUT_RESOURCE=keyvalout
 
 #######################################
@@ -17,12 +16,12 @@ KEYVALOUTPUT_RESOURCE=keyvalout
 #######################################
 #       Run Task
 #######################################
-#We are initializing the properties file to be used throughout the pipeline
-propsFile="${ROOT_FOLDER}/${KEYVAL_RESOURCE}/keyval.properties"
-touch "${propsFile}"
-
 #initialize the output for the keyval store
 mkdir -p "${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
+
+#We are initializing the properties file to be used throughout the pipeline
+propsFile="${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}/keyval.properties"
+touch "${propsFile}"  
 
 #need to source the utils to run the finalize task
 source "${ROOT_FOLDER}/${CONCOURSE_TASKS_RESOURCE}/functions/resource-util.sh"

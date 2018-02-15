@@ -9,7 +9,6 @@ image_resource:
 
 inputs:
   - name: dotnet-pipelines
-  - name: src-and-test
 
 outputs:
   - name: keyvalout
