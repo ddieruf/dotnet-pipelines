@@ -23,8 +23,6 @@ export VERSION_ROOT="${ROOT_FOLDER}/${SRC_VERSION_RESOURCE}"
 
 source "${ROOT_FOLDER}/${TASK_SCRIPTS_RESOURCE}/tasks/generate-version/run.sh"
 
-echo "New version number: ${NEW_VERSION_NUMBER}"
-
 #add the new version number to keyval store
 export PASSED_PIPELINE_VERSION="${NEW_VERSION_NUMBER}"
 
