@@ -5,8 +5,6 @@
 # 
 # Required Globals:
 #   VERSION_ROOT - the full path to the version source directory
-#   GIT_EMAIL - account to use for tag
-#   GIT_NAME- account to use for tag
 #
 # Output Globals:
 #   NEW_VERSION_NUMBER - the bumped version number
@@ -19,14 +17,6 @@ THIS_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 [[ ! -z "${VERSION_ROOT}" ]] || (echo "VERSION_ROOT is a required value" && exit 1)
 
 [[ ! -f "${VERSION_ROOT}" ]] || (echo "VERSION_ROOT path invalid [${VERSION_ROOT}]" && exit 1)
-
-#######################################
-#       Install required programs
-#######################################
-#command -v git >/dev/null 2>&1 || {
-#  echo "Installing required program: git"
-#  apt-get update && apt-get install -y --no-install-recommends git
-#}
 
 #######################################
 #       Source needed functions
