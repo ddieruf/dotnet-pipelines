@@ -38,7 +38,7 @@ fi
 
 currentVersion=$(cat "${VERSION_ROOT}/version") #get the contents
 
-if [[ ! -z "${currentVersion}" ]]; then
+if [[ -z "${currentVersion}" ]]; then
   echo "Seeding version [0.0.0]"
   currentVersion="0.0.0" #initialize if the file was empty
 fi
