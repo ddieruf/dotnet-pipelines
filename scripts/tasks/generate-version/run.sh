@@ -16,7 +16,7 @@ THIS_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 #######################################
 [[ ! -z "${VERSION_ROOT}" ]] || (echo "VERSION_ROOT is a required value" && exit 1)
 
-[[ ! -f "${VERSION_ROOT}" ]] || (echo "VERSION_ROOT path invalid [${VERSION_ROOT}]" && exit 1)
+[[ ! -d "${VERSION_ROOT}" ]] || (echo "VERSION_ROOT path invalid [${VERSION_ROOT}]" && exit 1)
 
 #######################################
 #       Source needed functions
@@ -38,7 +38,7 @@ fi
 
 currentVersion=$(cat "${VERSION_ROOT}/version") #get the contents
 
-if [[ -z "${currentVersion}" ]]; then
+if [[ ! -z "${currentVersion}" ]]; then
   echo "Seeding version [0.0.0]"
   currentVersion="0.0.0" #initialize if the file was empty
 fi
