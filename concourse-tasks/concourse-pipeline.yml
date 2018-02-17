@@ -13,6 +13,8 @@ resources:
     uri: ((src-and-test-url))
     branch: ((src-and-test-branch))
     private_key: ((github-private-key))
+    username: ((github-username))
+    password: ((github-password))
 
 - name: src-version
   type: git
@@ -20,6 +22,8 @@ resources:
     uri: ((src-and-test-url))
     branch: version
     private_key: ((github-private-key))
+    username: ((github-username))
+    password: ((github-password))
 
 - name: dotnet-pipelines
   type: git
@@ -62,25 +66,25 @@ jobs:
     params:
       file: keyvalout/keyval.properties
 
-#- name: scan-code-quality
-#  serial: true
-#  plan:
-#  - aggregate:
-#    - get: keyval
-#    - get: dotnet-pipelines
-#    - get: src-and-test
-#      trigger: true
-#      passed:
-#        - generate-version
-#      trigger: true
-#  - task: scan-code-quality
-#    file: dotnet-pipelines/concourse-tasks/scan-code-quality/task.yml
-#    params:
-#      <<: *dotnet-core-params
-#      <<: *sonar-params
-#  - put: keyval
-#    params:
-#      file: keyvalout/keyval.properties
+- name: scan-code-quality
+  serial: true
+  plan:
+  - aggregate:
+    - get: keyval
+    - get: dotnet-pipelines
+    - get: src-and-test
+      trigger: true
+      passed:
+        - generate-version
+      trigger: true
+  - task: scan-code-quality
+    file: dotnet-pipelines/concourse-tasks/scan-code-quality/task.yml
+    params:
+      <<: *dotnet-core-params
+      <<: *sonar-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
 
 - name: build-and-upload
   serial: true
@@ -116,6 +120,7 @@ jobs:
   - task: unit-test
     file: dotnet-pipelines/concourse-tasks/unit-test/task.yml
     params:
+      <<: *dotnet-core-params
       <<: *dotnet-solution-params
       <<: *artifactory-params
   - put: keyval
@@ -135,6 +140,7 @@ jobs:
   - task: integration-test
     file: dotnet-pipelines/concourse-tasks/integration-test/task.yml
     params:
+      <<: *dotnet-core-params
       <<: *dotnet-solution-params
       <<: *artifactory-params
   - put: keyval
@@ -173,6 +179,7 @@ jobs:
   - task: smoke-test
     file: dotnet-pipelines/concourse-tasks/smoke-test/task.yml
     params:
+      <<: *dotnet-core-params
       <<: *dotnet-solution-params
       <<: *artifactory-params
   - put: keyval
