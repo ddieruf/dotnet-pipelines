@@ -20,7 +20,7 @@ resources:
   type: git
   source:
     uri: ((src-and-test-url))
-    branch: version
+    branch: ((src-and-test-branch)) #You could create a solo branch, named version
     private_key: ((github-private-key))
     username: ((github-username))
     password: ((github-password))
