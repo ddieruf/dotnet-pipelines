@@ -47,12 +47,6 @@ fi
 #If you want the minor or major version changed edit the repo file manually
 # ie: if the current version is 0.0.5 and you want to bump the major version,
 #   change the file to be 1.0.0 and the next pipeline push will be 1.0.1
-versionParts=(${currentVersion//./ })
-if [[ ${#versionParts[@]} -lt 3 ]]; then
-  echo "Version number msut follow semantic pattern major.minor.patch"
-  exit 1
-fi
-
 echo "Found version ${currentVersion}"
 newVersion="${currentVersion%.*}.$((${currentVersion##*.}+1))" #bump patch version by 1
 echo "New version ${newVersion}"
