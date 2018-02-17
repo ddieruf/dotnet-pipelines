@@ -16,7 +16,7 @@ THIS_FOLDER="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 #######################################
 [[ ! -z "${VERSION_ROOT}" ]] || (echo "VERSION_ROOT is a required value" && exit 1)
 
-[[ ! -d "${VERSION_ROOT}" ]] || (echo "VERSION_ROOT path invalid [${VERSION_ROOT}]" && exit 1)
+[[ -d "${VERSION_ROOT}" ]] || (echo "VERSION_ROOT path invalid [${VERSION_ROOT}]" && exit 1)
 
 #######################################
 #       Source needed functions
