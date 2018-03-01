@@ -247,7 +247,7 @@ git-params: &git-params
   GIT_NAME: ((git-name))
 
 dotnet-core-params: &dotnet-core-params
-  DOTNET_VERSION: ((dotnet-version))
+  DOTNET_VERSION: ((dotnet-cli-version))
   DOTNET_FRAMEWORK: ((dotnet-framework))
   DOTNET_RUNTIME_ID: ((dotnet-runtime-id))
   DOTNET_PLATFORM: ((dotnet-platform))
