@@ -108,6 +108,8 @@ function buildAndUpload(){
   return 0
 }
 
+set -x #echo all commands
+
 echo "Build and upload the project src"
 echo "--------------------------------------------------------"
 cp "${CF_STAGE_MANIFEST_PATH}" "${THIS_FOLDER}/${PUBLISH_DIR}/cf-stage-manifest.yml" || exit 1

@@ -55,6 +55,7 @@ source "${THIS_FOLDER}/../../functions/sonar.sh" --scanner-version ${SONAR_SCANN
 #######################################
 #       Begin task
 #######################################
+set -x #echo all commands
 #now that the required dependencies are installed, one last test
 urlstatus=$(curl -o /dev/null --silent --head --write-out '%{http_code}' "${SONAR_HOST}" )
 if [[ ${urlstatus} -ne 200 ]]; then

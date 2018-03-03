@@ -42,6 +42,7 @@ mkdir "${THIS_FOLDER}/${ARTIFACT_EXTRACT}" || exit 1
 #######################################
 #       Begin task
 #######################################
+set -x #echo all commands
 echo "Retrieving and extracting src artifact"
 downloadAndExtractZipArtifact "${ARTIFACTORY_HOST}" "${ARTIFACTORY_TOKEN}" "${ARTIFACTORY_REPO_ID}" "${SRC_ARTIFACT_NAME}" "${THIS_FOLDER}/${ARTIFACT_EXTRACT}"
 

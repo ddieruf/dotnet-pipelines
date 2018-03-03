@@ -50,6 +50,7 @@ mkdir "${THIS_FOLDER}/${TEST_EXTRACT}" || exit 1
 #######################################
 #       Begin task
 #######################################
+set -x #echo all commands
 echo "Retrieving and extracting test artifact"
 downloadAndExtractZipArtifact "${ARTIFACTORY_HOST}" "${ARTIFACTORY_TOKEN}" "${ARTIFACTORY_REPO_ID}" "${INTEGRATION_TEST_ARTIFACT_NAME}" "${THIS_FOLDER}/${TEST_EXTRACT}"
 if [[ $? -eq 1 ]]; then
