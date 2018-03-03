@@ -8,9 +8,6 @@
 #   ARTIFACTORY_TOKEN
 #   ARTIFACTORY_REPO_ID
 #   APP_SRC_CSPROJ_PATH
-#   APP_UNIT_TEST_CSPROJ_PATH
-#   APP_INTEGRATION_TEST_CSPROJ_PATH
-#   APP_SMOKE_TEST_CSPROJ_PATH
 #   PIPELINE_VERSION
 #   CF_STAGE_MANIFEST_PATH
 #   CF_PROD_MANIFEST_PATH
@@ -18,6 +15,11 @@
 #   DOTNET_VERSION
 #   DOTNET_FRAMEWORK
 #   DOTNET_RUNTIME_ID
+#
+# Optional Globals:
+#   APP_UNIT_TEST_CSPROJ_PATH
+#   APP_INTEGRATION_TEST_CSPROJ_PATH
+#   APP_SMOKE_TEST_CSPROJ_PATH
 #
 # Output Globals:
 #   SRC_ARTIFACT_NAME
@@ -41,9 +43,6 @@ export OUTPUT_FOLDER="out"
 [[ ! -z "${ARTIFACTORY_TOKEN}" ]] || (echo "ARTIFACTORY_TOKEN is a required value" && exit 1)
 [[ ! -z "${ARTIFACTORY_REPO_ID}" ]] || (echo "ARTIFACTORY_REPO_ID is a required value" && exit 1)
 [[ ! -z "${APP_SRC_CSPROJ_PATH}" ]] || (echo "APP_SRC_CSPROJ_PATH is a required value" && exit 1)
-[[ ! -z "${APP_UNIT_TEST_CSPROJ_PATH}" ]] || (echo "APP_UNIT_TEST_CSPROJ_PATH is a required value" && exit 1)
-[[ ! -z "${APP_INTEGRATION_TEST_CSPROJ_PATH}" ]] || (echo "APP_INTEGRATION_TEST_CSPROJ_PATH is a required value" && exit 1)
-[[ ! -z "${APP_SMOKE_TEST_CSPROJ_PATH}" ]] || (echo "APP_SMOKE_TEST_CSPROJ_PATH is a required value" && exit 1)
 [[ ! -z "${CF_STAGE_MANIFEST_PATH}" ]] || (echo "CF_STAGE_MANIFEST_PATH is a required value" && exit 1)
 [[ ! -z "${CF_PROD_MANIFEST_PATH}" ]] || (echo "CF_PROD_MANIFEST_PATH is a required value" && exit 1)
 [[ ! -z "${ARTILLERY_MANIFEST_PATH}" ]] || (echo "ARTILLERY_MANIFEST_PATH is a required value" && exit 1)
@@ -51,18 +50,27 @@ export OUTPUT_FOLDER="out"
 [[ ! -z "${DOTNET_VERSION}" ]] || (echo "DOTNET_VERSION is a required value" && exit 1)
 
 [[ -f "${APP_SRC_CSPROJ_PATH}" ]] || (echo "APP_SRC_CSPROJ_PATH path invalid [${APP_SRC_CSPROJ_PATH}]" && exit 1)
-[[ -f "${APP_UNIT_TEST_CSPROJ_PATH}" ]] || (echo "APP_UNIT_TEST_CSPROJ_PATH path invalid [${APP_UNIT_TEST_CSPROJ_PATH}]" && exit 1)
-[[ -f "${APP_INTEGRATION_TEST_CSPROJ_PATH}" ]] || (echo "APP_INTEGRATION_TEST_CSPROJ_PATH path invalid [${APP_INTEGRATION_TEST_CSPROJ_PATH}]" && exit 1)
-[[ -f "${APP_SMOKE_TEST_CSPROJ_PATH}" ]] || (echo "APP_SMOKE_TEST_CSPROJ_PATH path invalid [${APP_SMOKE_TEST_CSPROJ_PATH}]" && exit 1)
 [[ -f "${CF_STAGE_MANIFEST_PATH}" ]] || (echo "CF_STAGE_MANIFEST_PATH path invalid [${CF_STAGE_MANIFEST_PATH}]" && exit 1)
 [[ -f "${CF_PROD_MANIFEST_PATH}" ]] || (echo "CF_PROD_MANIFEST_PATH path invalid [${CF_PROD_MANIFEST_PATH}]" && exit 1)
 [[ -f "${ARTILLERY_MANIFEST_PATH}" ]] || (echo "ARTILLERY_MANIFEST_PATH path invalid [${ARTILLERY_MANIFEST_PATH}]" && exit 1)
+
+if [[ -z "${APP_UNIT_TEST_CSPROJ_PATH}" ]]; then
+  [[ -f "${APP_UNIT_TEST_CSPROJ_PATH}" ]] || (echo "APP_UNIT_TEST_CSPROJ_PATH path invalid [${APP_UNIT_TEST_CSPROJ_PATH}]" && exit 1)
+fi
+
+if [[ -z "${APP_INTEGRATION_TEST_CSPROJ_PATH}" ]]; then
+  [[ -f "${APP_INTEGRATION_TEST_CSPROJ_PATH}" ]] || (echo "APP_INTEGRATION_TEST_CSPROJ_PATH path invalid [${APP_INTEGRATION_TEST_CSPROJ_PATH}]" && exit 1)
+fi
+
+if [[ -z "${APP_SMOKE_TEST_CSPROJ_PATH}" ]]; then
+  [[ -f "${APP_SMOKE_TEST_CSPROJ_PATH}" ]] || (echo "APP_SMOKE_TEST_CSPROJ_PATH path invalid [${APP_SMOKE_TEST_CSPROJ_PATH}]" && exit 1)
+fi
 
 #######################################
 #       Source needed functions
 #######################################
 source "${THIS_FOLDER}/../../functions/dotnet.sh" --version ${DOTNET_VERSION}
-#source "${THIS_FOLDER}/../../functions/mono.sh" #mono is used to FrameworkPathOverride in dotnet.sh
+source "${THIS_FOLDER}/../../functions/mono.sh" #mono is used to FrameworkPathOverride in dotnet.sh
 source "${THIS_FOLDER}/../../functions/artifactory.sh"
 
 #######################################
@@ -116,40 +124,46 @@ else
   echo "Successfully created artifact ${SRC_ARTIFACT_NAME}"
 fi
 
-echo "Build and upload the project unit-test"
-echo "--------------------------------------------------------"
-buildAndUpload "${APP_UNIT_TEST_CSPROJ_PATH}" "${PIPELINE_VERSION}" "unit-test"
-if [[ $? -eq 1 ]]; then
-  echo "ERROR: buildAndUpload unit-test:\n${ret}"
-  exit 1
-else
-  export UNIT_TEST_ARTIFACT_NAME="${ARTIFACT_NAME}"
-  unset ARTIFACT_NAME
-  echo "Successfully created artifact ${UNIT_TEST_ARTIFACT_NAME}"
+if [[ -z "${APP_UNIT_TEST_CSPROJ_PATH}" ]]; then
+  echo "Build and upload the project unit-test"
+  echo "--------------------------------------------------------"
+  buildAndUpload "${APP_UNIT_TEST_CSPROJ_PATH}" "${PIPELINE_VERSION}" "unit-test"
+  if [[ $? -eq 1 ]]; then
+    echo "ERROR: buildAndUpload unit-test:\n${ret}"
+    exit 1
+  else
+    export UNIT_TEST_ARTIFACT_NAME="${ARTIFACT_NAME}"
+    unset ARTIFACT_NAME
+    echo "Successfully created artifact ${UNIT_TEST_ARTIFACT_NAME}"
+  fi
 fi
 
-echo "Build and upload the project integration-test"
-echo "--------------------------------------------------------"
-buildAndUpload "${APP_INTEGRATION_TEST_CSPROJ_PATH}" "${PIPELINE_VERSION}" "integration-test"
-if [[ $? -eq 1 ]]; then
-  echo "ERROR: buildAndUpload integration-test:\n${ret}"
-  exit 1
-else
-  export INTEGRATION_TEST_ARTIFACT_NAME="${ARTIFACT_NAME}"
-  unset ARTIFACT_NAME
-  echo "Successfully created artifact ${INTEGRATION_TEST_ARTIFACT_NAME}"
+if [[ -z "${APP_INTEGRATION_TEST_CSPROJ_PATH}" ]]; then
+  echo "Build and upload the project integration-test"
+  echo "--------------------------------------------------------"
+  buildAndUpload "${APP_INTEGRATION_TEST_CSPROJ_PATH}" "${PIPELINE_VERSION}" "integration-test"
+  if [[ $? -eq 1 ]]; then
+    echo "ERROR: buildAndUpload integration-test:\n${ret}"
+    exit 1
+  else
+    export INTEGRATION_TEST_ARTIFACT_NAME="${ARTIFACT_NAME}"
+    unset ARTIFACT_NAME
+    echo "Successfully created artifact ${INTEGRATION_TEST_ARTIFACT_NAME}"
+  fi
 fi
 
-echo "Build and upload the project smoke-test"
-echo "--------------------------------------------------------"
-buildAndUpload "${APP_SMOKE_TEST_CSPROJ_PATH}" "${PIPELINE_VERSION}" "smoke-test"
-if [[ $? -eq 1 ]]; then
-  echo "ERROR: buildAndUpload smoke-test:\n${ret}"
-  exit 1
-else
-  export SMOKE_TEST_ARTIFACT_NAME="${ARTIFACT_NAME}"
-  unset ARTIFACT_NAME
-  echo "Successfully created artifact ${SMOKE_TEST_ARTIFACT_NAME}"
+if [[ -z "${APP_SMOKE_TEST_CSPROJ_PATH}" ]]; then
+  echo "Build and upload the project smoke-test"
+  echo "--------------------------------------------------------"
+  buildAndUpload "${APP_SMOKE_TEST_CSPROJ_PATH}" "${PIPELINE_VERSION}" "smoke-test"
+  if [[ $? -eq 1 ]]; then
+    echo "ERROR: buildAndUpload smoke-test:\n${ret}"
+    exit 1
+  else
+    export SMOKE_TEST_ARTIFACT_NAME="${ARTIFACT_NAME}"
+    unset ARTIFACT_NAME
+    echo "Successfully created artifact ${SMOKE_TEST_ARTIFACT_NAME}"
+  fi
 fi
 
 #######################################
