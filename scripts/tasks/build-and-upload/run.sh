@@ -1,7 +1,4 @@
 #!/bin/bash
-#
-# Task Description:
-#   A description
 # 
 # Required Globals:
 #   ARTIFACTORY_HOST
@@ -11,15 +8,15 @@
 #   PIPELINE_VERSION
 #   CF_STAGE_MANIFEST_PATH
 #   CF_PROD_MANIFEST_PATH
-#   ARTILLERY_MANIFEST_PATH
 #   DOTNET_VERSION
 #   DOTNET_FRAMEWORK
-#   DOTNET_RUNTIME_ID
 #
 # Optional Globals:
 #   APP_UNIT_TEST_CSPROJ_PATH
 #   APP_INTEGRATION_TEST_CSPROJ_PATH
 #   APP_SMOKE_TEST_CSPROJ_PATH
+#   ARTILLERY_MANIFEST_PATH
+#   DOTNET_RUNTIME_ID
 #
 # Output Globals:
 #   SRC_ARTIFACT_NAME
@@ -45,24 +42,23 @@ export OUTPUT_FOLDER="out"
 [[ ! -z "${APP_SRC_CSPROJ_PATH}" ]] || (echo "APP_SRC_CSPROJ_PATH is a required value" && exit 1)
 [[ ! -z "${CF_STAGE_MANIFEST_PATH}" ]] || (echo "CF_STAGE_MANIFEST_PATH is a required value" && exit 1)
 [[ ! -z "${CF_PROD_MANIFEST_PATH}" ]] || (echo "CF_PROD_MANIFEST_PATH is a required value" && exit 1)
-[[ ! -z "${ARTILLERY_MANIFEST_PATH}" ]] || (echo "ARTILLERY_MANIFEST_PATH is a required value" && exit 1)
 [[ ! -z "${DOTNET_FRAMEWORK}" ]] || (echo "DOTNET_FRAMEWORK is a required value" && exit 1)
 [[ ! -z "${DOTNET_VERSION}" ]] || (echo "DOTNET_VERSION is a required value" && exit 1)
 
 [[ -f "${APP_SRC_CSPROJ_PATH}" ]] || (echo "APP_SRC_CSPROJ_PATH path invalid [${APP_SRC_CSPROJ_PATH}]" && exit 1)
 [[ -f "${CF_STAGE_MANIFEST_PATH}" ]] || (echo "CF_STAGE_MANIFEST_PATH path invalid [${CF_STAGE_MANIFEST_PATH}]" && exit 1)
 [[ -f "${CF_PROD_MANIFEST_PATH}" ]] || (echo "CF_PROD_MANIFEST_PATH path invalid [${CF_PROD_MANIFEST_PATH}]" && exit 1)
-[[ -f "${ARTILLERY_MANIFEST_PATH}" ]] || (echo "ARTILLERY_MANIFEST_PATH path invalid [${ARTILLERY_MANIFEST_PATH}]" && exit 1)
 
-if [[ -z "${APP_UNIT_TEST_CSPROJ_PATH}" ]]; then
+if [[ ! -z "${ARTILLERY_MANIFEST_PATH}" ]]; then
+  [[ -f "${ARTILLERY_MANIFEST_PATH}" ]] || (echo "ARTILLERY_MANIFEST_PATH path invalid [${ARTILLERY_MANIFEST_PATH}]" && exit 1)
+fi
+if [[ ! -z "${APP_UNIT_TEST_CSPROJ_PATH}" ]]; then
   [[ -f "${APP_UNIT_TEST_CSPROJ_PATH}" ]] || (echo "APP_UNIT_TEST_CSPROJ_PATH path invalid [${APP_UNIT_TEST_CSPROJ_PATH}]" && exit 1)
 fi
-
-if [[ -z "${APP_INTEGRATION_TEST_CSPROJ_PATH}" ]]; then
+if [[ ! -z "${APP_INTEGRATION_TEST_CSPROJ_PATH}" ]]; then
   [[ -f "${APP_INTEGRATION_TEST_CSPROJ_PATH}" ]] || (echo "APP_INTEGRATION_TEST_CSPROJ_PATH path invalid [${APP_INTEGRATION_TEST_CSPROJ_PATH}]" && exit 1)
 fi
-
-if [[ -z "${APP_SMOKE_TEST_CSPROJ_PATH}" ]]; then
+if [[ ! -z "${APP_SMOKE_TEST_CSPROJ_PATH}" ]]; then
   [[ -f "${APP_SMOKE_TEST_CSPROJ_PATH}" ]] || (echo "APP_SMOKE_TEST_CSPROJ_PATH path invalid [${APP_SMOKE_TEST_CSPROJ_PATH}]" && exit 1)
 fi
 
@@ -114,7 +110,9 @@ echo "Build and upload the project src"
 echo "--------------------------------------------------------"
 cp "${CF_STAGE_MANIFEST_PATH}" "${THIS_FOLDER}/${PUBLISH_DIR}/cf-stage-manifest.yml" || exit 1
 cp "${CF_PROD_MANIFEST_PATH}" "${THIS_FOLDER}/${PUBLISH_DIR}/cf-prod-manifest.yml" || exit 1
-cp "${ARTILLERY_MANIFEST_PATH}" "${THIS_FOLDER}/${PUBLISH_DIR}" || exit 1
+if [[ ! -z "${ARTILLERY_MANIFEST_PATH}" ]]; then
+  cp "${ARTILLERY_MANIFEST_PATH}" "${THIS_FOLDER}/${PUBLISH_DIR}" || exit 1
+fi
 
 buildAndUpload "${APP_SRC_CSPROJ_PATH}" "${PIPELINE_VERSION}" "src"
 if [[ $? -eq 1 ]]; then
@@ -126,7 +124,7 @@ else
   echo "Successfully created artifact ${SRC_ARTIFACT_NAME}"
 fi
 
-if [[ -z "${APP_UNIT_TEST_CSPROJ_PATH}" ]]; then
+if [[ ! -z "${APP_UNIT_TEST_CSPROJ_PATH}" ]]; then
   echo "Build and upload the project unit-test"
   echo "--------------------------------------------------------"
   buildAndUpload "${APP_UNIT_TEST_CSPROJ_PATH}" "${PIPELINE_VERSION}" "unit-test"
@@ -140,7 +138,7 @@ if [[ -z "${APP_UNIT_TEST_CSPROJ_PATH}" ]]; then
   fi
 fi
 
-if [[ -z "${APP_INTEGRATION_TEST_CSPROJ_PATH}" ]]; then
+if [[ ! -z "${APP_INTEGRATION_TEST_CSPROJ_PATH}" ]]; then
   echo "Build and upload the project integration-test"
   echo "--------------------------------------------------------"
   buildAndUpload "${APP_INTEGRATION_TEST_CSPROJ_PATH}" "${PIPELINE_VERSION}" "integration-test"
@@ -154,7 +152,7 @@ if [[ -z "${APP_INTEGRATION_TEST_CSPROJ_PATH}" ]]; then
   fi
 fi
 
-if [[ -z "${APP_SMOKE_TEST_CSPROJ_PATH}" ]]; then
+if [[ ! -z "${APP_SMOKE_TEST_CSPROJ_PATH}" ]]; then
   echo "Build and upload the project smoke-test"
   echo "--------------------------------------------------------"
   buildAndUpload "${APP_SMOKE_TEST_CSPROJ_PATH}" "${PIPELINE_VERSION}" "smoke-test"

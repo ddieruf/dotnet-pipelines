@@ -4,7 +4,7 @@
 #   Given an orphan banch named version, look up its value and incrament
 # 
 # Required Globals:
-#   VERSION_ROOT - the full path to the version source directory
+#   VERSION_ROOT - the absolute path to the version source directory
 #
 # Output Globals:
 #   NEW_VERSION_NUMBER - the bumped version number

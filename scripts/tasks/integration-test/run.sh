@@ -12,7 +12,10 @@
 #   DOTNET_VERSION
 #   DOTNET_FRAMEWORK
 #   DOTNET_PLATFORM
+# 
+# Optional Globals:
 #   DOTNET_TEST_LOGGER
+#
 
 set -o errexit
 set -o errtrace
