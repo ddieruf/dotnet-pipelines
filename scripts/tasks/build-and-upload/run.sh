@@ -124,10 +124,11 @@ else
   echo "Successfully created artifact ${SRC_ARTIFACT_NAME}"
 fi
 
-if [[ ! -z "${APP_UNIT_TEST_CSPROJ_PATH}" ]]; then
+VAL=${APP_UNIT_TEST_CSPROJ_PATH:-} #an optional value
+if [[ ! -z "${VAL}" ]]; then
   echo "Build and upload the project unit-test"
   echo "--------------------------------------------------------"
-  buildAndUpload "${APP_UNIT_TEST_CSPROJ_PATH}" "${PIPELINE_VERSION}" "unit-test"
+  buildAndUpload "${VAL}" "${PIPELINE_VERSION}" "unit-test"
   if [[ $? -eq 1 ]]; then
     echo "ERROR: buildAndUpload unit-test:\n${ret}"
     exit 1
@@ -138,10 +139,11 @@ if [[ ! -z "${APP_UNIT_TEST_CSPROJ_PATH}" ]]; then
   fi
 fi
 
-if [[ ! -z "${APP_INTEGRATION_TEST_CSPROJ_PATH}" ]]; then
+VAL=${APP_INTEGRATION_TEST_CSPROJ_PATH:-} #an optional value
+if [[ ! -z "${VAL}" ]]; then
   echo "Build and upload the project integration-test"
   echo "--------------------------------------------------------"
-  buildAndUpload "${APP_INTEGRATION_TEST_CSPROJ_PATH}" "${PIPELINE_VERSION}" "integration-test"
+  buildAndUpload "${VAL}" "${PIPELINE_VERSION}" "integration-test"
   if [[ $? -eq 1 ]]; then
     echo "ERROR: buildAndUpload integration-test:\n${ret}"
     exit 1
@@ -152,10 +154,11 @@ if [[ ! -z "${APP_INTEGRATION_TEST_CSPROJ_PATH}" ]]; then
   fi
 fi
 
-if [[ ! -z "${APP_SMOKE_TEST_CSPROJ_PATH}" ]]; then
+VAL=${APP_SMOKE_TEST_CSPROJ_PATH:-} #an optional value
+if [[ ! -z "${VAL}" ]]; then
   echo "Build and upload the project smoke-test"
   echo "--------------------------------------------------------"
-  buildAndUpload "${APP_SMOKE_TEST_CSPROJ_PATH}" "${PIPELINE_VERSION}" "smoke-test"
+  buildAndUpload "${VAL}" "${PIPELINE_VERSION}" "smoke-test"
   if [[ $? -eq 1 ]]; then
     echo "ERROR: buildAndUpload smoke-test:\n${ret}"
     exit 1
