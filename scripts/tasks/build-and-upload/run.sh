@@ -9,7 +9,6 @@
 #   CF_STAGE_MANIFEST_PATH
 #   CF_PROD_MANIFEST_PATH
 #   DOTNET_VERSION
-#   DOTNET_FRAMEWORK
 #
 # Optional Globals:
 #   APP_UNIT_TEST_CSPROJ_PATH
@@ -42,7 +41,6 @@ export OUTPUT_FOLDER="out"
 [[ ! -z "${APP_SRC_CSPROJ_PATH}" ]] || (echo "APP_SRC_CSPROJ_PATH is a required value" && exit 1)
 [[ ! -z "${CF_STAGE_MANIFEST_PATH}" ]] || (echo "CF_STAGE_MANIFEST_PATH is a required value" && exit 1)
 [[ ! -z "${CF_PROD_MANIFEST_PATH}" ]] || (echo "CF_PROD_MANIFEST_PATH is a required value" && exit 1)
-[[ ! -z "${DOTNET_FRAMEWORK}" ]] || (echo "DOTNET_FRAMEWORK is a required value" && exit 1)
 [[ ! -z "${DOTNET_VERSION}" ]] || (echo "DOTNET_VERSION is a required value" && exit 1)
 
 [[ -f "${APP_SRC_CSPROJ_PATH}" ]] || (echo "APP_SRC_CSPROJ_PATH path invalid [${APP_SRC_CSPROJ_PATH}]" && exit 1)
@@ -80,16 +78,12 @@ mkdir "${THIS_FOLDER}/${OUTPUT_FOLDER}" || exit 1
 #######################################
 function buildAndUpload(){
   local csprojPath="${1}"
-  local pipelineVersion="${2}"
-  local artifactNameSuffix="${3}"
+  local artifactNameSuffix="${2}"
 
   local artifactName="${pipelineVersion//./_}-${artifactNameSuffix}.zip"
 
   publishProject \
-    "release" \
-    "${DOTNET_FRAMEWORK}" \
     "${THIS_FOLDER}/${PUBLISH_DIR}" \
-    "${DOTNET_RUNTIME_ID}" \
     "${csprojPath}"
 
   createAndUploadAppArtifact \
@@ -114,7 +108,7 @@ if [[ ! -z "${ARTILLERY_MANIFEST_PATH}" ]]; then
   cp "${ARTILLERY_MANIFEST_PATH}" "${THIS_FOLDER}/${PUBLISH_DIR}" || exit 1
 fi
 
-buildAndUpload "${APP_SRC_CSPROJ_PATH}" "${PIPELINE_VERSION}" "src"
+buildAndUpload "${APP_SRC_CSPROJ_PATH}" "src"
 if [[ $? -eq 1 ]]; then
   echo "ERROR: buildAndUpload src:\n${ret}"
   exit 1
@@ -128,7 +122,7 @@ VAL=${APP_UNIT_TEST_CSPROJ_PATH:-} #an optional value
 if [[ ! -z "${VAL}" ]]; then
   echo "Build and upload the project unit-test"
   echo "--------------------------------------------------------"
-  buildAndUpload "${VAL}" "${PIPELINE_VERSION}" "unit-test"
+  buildAndUpload "${VAL}" "unit-test"
   if [[ $? -eq 1 ]]; then
     echo "ERROR: buildAndUpload unit-test:\n${ret}"
     exit 1
@@ -143,7 +137,7 @@ VAL=${APP_INTEGRATION_TEST_CSPROJ_PATH:-} #an optional value
 if [[ ! -z "${VAL}" ]]; then
   echo "Build and upload the project integration-test"
   echo "--------------------------------------------------------"
-  buildAndUpload "${VAL}" "${PIPELINE_VERSION}" "integration-test"
+  buildAndUpload "${VAL}" "integration-test"
   if [[ $? -eq 1 ]]; then
     echo "ERROR: buildAndUpload integration-test:\n${ret}"
     exit 1

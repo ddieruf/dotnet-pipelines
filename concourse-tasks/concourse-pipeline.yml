@@ -80,7 +80,7 @@ jobs:
   - task: scan-code-quality
     file: dotnet-pipelines/concourse-tasks/scan-code-quality/task.yml
     params:
-      <<: *dotnet-core-params
+      <<: *dotnet-params
       <<: *sonar-params
   - put: keyval
     params:
@@ -100,7 +100,7 @@ jobs:
     file: dotnet-pipelines/concourse-tasks/build-and-upload/task.yml
     params:
       <<: *dotnet-solution-params
-      <<: *dotnet-core-params
+      <<: *dotnet-params
       <<: *artifactory-params
       <<: *cloud-foundry-params
   - put: keyval
@@ -120,7 +120,7 @@ jobs:
   - task: unit-test
     file: dotnet-pipelines/concourse-tasks/unit-test/task.yml
     params:
-      <<: *dotnet-core-params
+      <<: *dotnet-params
       <<: *dotnet-solution-params
       <<: *artifactory-params
   - put: keyval
@@ -140,7 +140,7 @@ jobs:
   - task: integration-test
     file: dotnet-pipelines/concourse-tasks/integration-test/task.yml
     params:
-      <<: *dotnet-core-params
+      <<: *dotnet-params
       <<: *dotnet-solution-params
       <<: *artifactory-params
   - put: keyval
@@ -179,7 +179,7 @@ jobs:
   - task: smoke-test
     file: dotnet-pipelines/concourse-tasks/smoke-test/task.yml
     params:
-      <<: *dotnet-core-params
+      <<: *dotnet-params
       <<: *dotnet-solution-params
       <<: *artifactory-params
   - put: keyval
@@ -246,12 +246,8 @@ git-params: &git-params
   GIT_EMAIL: ((git-email))
   GIT_NAME: ((git-name))
 
-dotnet-core-params: &dotnet-core-params
+dotnet-params: &dotnet-params
   DOTNET_VERSION: ((dotnet-cli-version))
-  DOTNET_FRAMEWORK: ((dotnet-framework))
-  DOTNET_RUNTIME_ID: ((dotnet-runtime-id))
-  DOTNET_PLATFORM: ((dotnet-platform))
-  DOTNET_TEST_LOGGER: ((dotnet-test-logger))
 
 sonar-params: &sonar-params
   SONAR_PROJECT_KEY: ((sonar-project-key))

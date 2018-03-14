@@ -25,11 +25,7 @@ sonar-msbuild-version: 4.0.2.892
 sonar-timeout-seconds: 240 #the time, in seconds, Sonar Qube should wait for a quality gate report
 
 #DOTNET CORE INFO
-dotnet-cli-version: 2.0.3 #Required https://github.com/dotnet/core/releases
-dotnet-framework: "" #Required https://docs.microsoft.com/en-us/dotnet/standard/frameworks
-dotnet-runtime-id:  #Leave bkank to not include the entire runtime in artifact https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
-dotnet-platform: "" #Required https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
-dotnet-test-logger:  #Leave blank to not use logger functions during tests https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-vstest
+dotnet-cli-version: 2.1.4 #Required https://github.com/dotnet/core/releases
 
 #DOTNET SOLUTION INFO
 src-csproj-location-in-solution: "" #From the sln file, the location of the app source code project file

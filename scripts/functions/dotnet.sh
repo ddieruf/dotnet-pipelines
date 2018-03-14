@@ -71,10 +71,7 @@ function install(){
 #   None
 #######################################
 function publishProject(){
-	local configuration="${1}"
-	local framework="${2}"
 	local artifactDirPath="${3}"
-	local runtime="${4}"
 	local csprojFilePath="${5}"
 
 	dotnet clean "${csprojFilePath}"
@@ -83,20 +80,10 @@ function publishProject(){
 	#prepare the app to be published and output to provided publish dir
 	# dotnet publish output is realative to the bin directory created during build, if an absolute path is not provided
 	# dotnet restore will happen automatically
-	if [[ -z "${runtime}" ]]; then #do not include the dotnet runtime with publish result
-		dotnet publish \
-			--configuration "${configuration}" \
-			--framework "${framework}" \
-			--output "${artifactDirPath}" \
-			"${csprojFilePath}"
-	else
-		dotnet publish \
-			--configuration "${configuration}" \
-			--framework "${framework}" \
-			--output "${artifactDirPath}" \
-			--runtime "${runtime}" \
-			"${csprojFilePath}"
-	fi
+
+	dotnet publish \
+		--output "${artifactDirPath}" \
+		"${csprojFilePath}"
 	
 	return 0
 }
@@ -117,9 +104,6 @@ function publishProject(){
 #######################################
 function testProject(){
 	local testAppDllPath="${1}"
-	local platform="${2}"
-	local framework="${3}" #for future use
-	local logger="${4}"
 
 	echo "Discovered tests"
 	dotnet vstest "${testAppDllPath}" --ListTests 
@@ -127,14 +111,8 @@ function testProject(){
 	echo "-----------------------------------------------"
 
 	echo "Running dotnet vstest [${testAppDllPath}]"
-	if [[ -z "${logger}" ]]; then
-		dotnet vstest "${testAppDllPath}" \
-			--platform:"${platform}"
-	else
-		dotnet vstest "${testAppDllPath}" \
-			--platform:"${platform}" \
-			--logger:${logger}
-	fi
+	dotnet vstest "${testAppDllPath}"
+
 	return 0
 }
 #######################################
@@ -166,15 +144,8 @@ function cleanSolution(){
 #   None
 #######################################
 function buildSolution(){
-	local framework="${1}"
-	local runtimeId="${2}"
-	local configuration="${3}"
-
 	#build every project in the folder
-	dotnet build \
-		--configuration "${configuration}" \
-		--framework "${framework}" \
-		--runtime "${runtimeId}"
+	dotnet build
 
 	return 0
 }
