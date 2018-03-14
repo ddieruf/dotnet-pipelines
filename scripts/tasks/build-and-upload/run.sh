@@ -78,7 +78,8 @@ mkdir "${THIS_FOLDER}/${OUTPUT_FOLDER}" || exit 1
 #######################################
 function buildAndUpload(){
   local csprojPath="${1}"
-  local artifactNameSuffix="${2}"
+  local pipelineVersion="${2}"
+  local artifactNameSuffix="${3}"
 
   local artifactName="${pipelineVersion//./_}-${artifactNameSuffix}.zip"
 
@@ -108,7 +109,7 @@ if [[ ! -z "${ARTILLERY_MANIFEST_PATH}" ]]; then
   cp "${ARTILLERY_MANIFEST_PATH}" "${THIS_FOLDER}/${PUBLISH_DIR}" || exit 1
 fi
 
-buildAndUpload "${APP_SRC_CSPROJ_PATH}" "src"
+buildAndUpload "${APP_SRC_CSPROJ_PATH}" "${PIPELINE_VERSION}" "src"
 if [[ $? -eq 1 ]]; then
   echo "ERROR: buildAndUpload src:\n${ret}"
   exit 1
@@ -122,7 +123,7 @@ VAL=${APP_UNIT_TEST_CSPROJ_PATH:-} #an optional value
 if [[ ! -z "${VAL}" ]]; then
   echo "Build and upload the project unit-test"
   echo "--------------------------------------------------------"
-  buildAndUpload "${VAL}" "unit-test"
+  buildAndUpload "${VAL}" "${PIPELINE_VERSION}" "unit-test"
   if [[ $? -eq 1 ]]; then
     echo "ERROR: buildAndUpload unit-test:\n${ret}"
     exit 1
@@ -137,7 +138,7 @@ VAL=${APP_INTEGRATION_TEST_CSPROJ_PATH:-} #an optional value
 if [[ ! -z "${VAL}" ]]; then
   echo "Build and upload the project integration-test"
   echo "--------------------------------------------------------"
-  buildAndUpload "${VAL}" "integration-test"
+  buildAndUpload "${VAL}" "${PIPELINE_VERSION}" "integration-test"
   if [[ $? -eq 1 ]]; then
     echo "ERROR: buildAndUpload integration-test:\n${ret}"
     exit 1
