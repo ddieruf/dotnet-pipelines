@@ -15,11 +15,9 @@ The task has the following steps:
 	SMOKE_TEST_ARTIFACT_NAME - The artifact name created from running the build-and-uplaod task
 	SMOKE_TEST_DLL_NAME - The dll name of the artifact test project
 	DOTNET_VERSION: Dotnet cli version https://github.com/dotnet/core/releases
-	DOTNET_FRAMEWORK: https://docs.microsoft.com/en-us/dotnet/standard/frameworks
-	DOTNET_PLATFORM: https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
 
 ### Optional Values
-	DOTNET_TEST_LOGGER: Leave blank to not use logger functions during tests https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-vstest
+	none
 
 ### Output Values
 	none

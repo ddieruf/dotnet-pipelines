@@ -24,14 +24,12 @@ The task has the following steps:
 	CF_STAGE_MANIFEST_PATH: From the sln file, the location of the staging cf manifest
 	CF_PROD_MANIFEST_PATH: From the sln file, the location of the prod cf manifest
 	DOTNET_VERSION: Dotnet cli version https://github.com/dotnet/core/releases
-	DOTNET_FRAMEWORK: https://docs.microsoft.com/en-us/dotnet/standard/frameworks
 
 ### Optional Values
 	APP_UNIT_TEST_CSPROJ_PATH: From the sln file, the location of the app unit test project file
 	APP_INTEGRATION_TEST_CSPROJ_PATH: From the sln file, the location of the app integration test project file
 	APP_SMOKE_TEST_CSPROJ_PATH: From the sln file, the location of the app smoke test project file
 	ARTILLERY_MANIFEST_PATH: From the sln file, the location of the artillery manifest
-	DOTNET_RUNTIME_ID: https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
 
 ### Output Values
 	SRC_ARTIFACT_NAME: The generated and saved archive name holding the app dll's

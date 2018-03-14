@@ -22,8 +22,6 @@ The task has the following steps:
 	SONAR_HOST: The URL to access SonarQube
 	SONAR_LOGIN_KEY: https://docs.sonarqube.org/display/SONAR/User+Token
 	DOTNET_VERSION: Dotnet cli version https://github.com/dotnet/core/releases
-	DOTNET_FRAMEWORK: https://docs.microsoft.com/en-us/dotnet/standard/frameworks
-	DOTNET_RUNTIME_ID: https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
 	SONAR_SCANNER_VERSION: Version of sonar cli
 	SONAR_SCANNER_MSBUILD_VERSION: Version of the sonar msbuild scanner
 	SONAR_TIMEOUT_SECONDS: The time, in seconds, Sonar Qube should wait for a quality gate report
