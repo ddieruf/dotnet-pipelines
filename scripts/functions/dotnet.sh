@@ -71,8 +71,8 @@ function install(){
 #   None
 #######################################
 function publishProject(){
-	local artifactDirPath="${3}"
-	local csprojFilePath="${5}"
+	local artifactDirPath="${1}"
+	local csprojFilePath="${2}"
 
 	dotnet clean "${csprojFilePath}"
 
