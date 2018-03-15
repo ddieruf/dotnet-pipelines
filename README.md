@@ -6,9 +6,9 @@ Welcome! This project is aimed at dotnet developers, both core and framework, wa
 
 I have provided example pipelines for certain tools. The folder name will point you in the right direction. The 'scripts' folder is where the magic happens. I suggest referencing this repo, and not copying the entire thing. When more steps are requested or needed they will be added to this folder.
 
-I have also created sample VS solutions that utilize this pipeline. I suggest using these simple apps to understand what is going on and the solution structure. Once you have the pipeline working properly, adapt to your solution.
-[dotnet core](https://github.com/ddieruf/log-message-dotnet-core)
-[dotnet framework](https://github.com/ddieruf/log-message-dotnet-framework)
+I have also created sample solutions that utilize this pipeline. I suggest using these simple apps to understand what is going on and the solution structure. Once you have the pipeline working properly, adapt to your solution.  
+[dotnet core](https://github.com/ddieruf/log-message-core20)  
+[dotnet framework](https://github.com/ddieruf/log-message-framework45)
 
 ### Design
 
@@ -32,6 +32,16 @@ These scripts are used to define a given app's pipeline. In concourse each scrip
 #### Task Scripts
 
 These scripts are referenced within the calling pipeline script. Most of these scripts use environment variables to "communicate" back to the pipeline script upon successfully completing or erroring out. The intention is for these scripts to live outside any one application's pipeline. They are self-sufficient in that they will install needed dependencies and require/check for needed environment variables. In the case of a task needing to connect to another platform (Artifactory, Sonar, etc) the script will verify access before running.
+
+##### About Each Task
+- [generate-version](https://github.com/ddieruf/dotnet-pipelines/tree/master/scripts/tasks/generate-version) - Incrament the build version
+- [scan-code-quality](https://github.com/ddieruf/dotnet-pipelines/tree/master/scripts/tasks/scan-code-quality) - Using SonarQube, scan and pass/fail the code quality
+- [build-and-upload](https://github.com/ddieruf/dotnet-pipelines/tree/master/scripts/tasks/build-and-upload) - Run dotnet publish on each project, archive[zip] the result and upload to Artifactory repo
+- [unit-test](https://github.com/ddieruf/dotnet-pipelines/tree/master/scripts/tasks/unit-test) - Run unit tests on the app. (Follow the link to learn more about how a unit test is defined)
+- [integration-test](https://github.com/ddieruf/dotnet-pipelines/tree/master/scripts/tasks/integration-test) - Run integration tests on the app. (Follow the link to learn more about how an integration test is defined)
+- [push-to-cf](https://github.com/ddieruf/dotnet-pipelines/tree/master/scripts/tasks/push-to-cf) - Push the tested app to a given org/space in Cloud Foundry
+- [smoke-test](https://github.com/ddieruf/dotnet-pipelines/tree/master/scripts/tasks/smoke-test) - With the app available via HTTP, run smoke tests. (Follow the link to learn more about how a smoke test is defined)
+- [load-test](https://github.com/ddieruf/dotnet-pipelines/tree/master/scripts/tasks/load-test) - With the app available via HTTP, using Artillery, run load tests
 
 ## Deployment
 

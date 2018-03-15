@@ -37,15 +37,15 @@ function install(){
   apt-get install --assume-yes --fix-broken --quiet \
     libunwind8 \
     liblttng-ust0 \
-		libcurl3 \
-		libssl1.0.0 \
-		libuuid1 \
-		libkrb5-3 \
-		zlib1g \
-		libicu55 \
-		curl \
-		openssl \
-		apt-transport-https
+	libcurl3 \
+	libssl1.0.0 \
+	libuuid1 \
+	libkrb5-3 \
+	zlib1g \
+	libicu55 \
+	curl \
+	openssl \
+	apt-transport-https
 
 	source $( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/dotnet-install.sh \
 		--version ${version} \
