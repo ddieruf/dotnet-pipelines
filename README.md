@@ -23,6 +23,8 @@ I have chosen to start with a blank canvas (Linux OS) and let the given task bui
 
 First, you will need to make a decision about where the pipeline scripts and task scripts live. On one hand you can reference this repo's pipeline tasks and scripts with a version number. Good side is when tasks are added you simply add a new step in your pipeline definition and maybe some new params. Bad side is you have tied your solution to this repo! If you chose to not be tied to this repo I suggest NOT cloning, instead copy the zip/tar and put everything in a local repo that you control. Then you reference that new repo in your pipeline. Do not copy this entire repo and paste it into your existing solution, it is worthly of it's own repo. That is not scalable, is generally a bad practice, and is asking for source code duplication (duplication==bad).
 
+Note: The master branch is where I am doing development. While I [try] to never push bugs we all know how that goes. Choose a specific versioned branch for the best stability.
+
 #### Pipeline Scripts
 
 These scripts are used to define a given app's pipeline. In concourse each script would result in a different job. In a TFS release definition* each script would result in a different agent phase. Notice the directories are named for the given CI/CD tool. These tasks could possibly be specific to a given application's build needs and if they needed to live with the application source, it could be justifiable.
