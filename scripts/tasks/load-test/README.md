@@ -8,7 +8,7 @@ The task has the following steps:
 - download and extract the src archive from artifactory, to get the artillery manifest
 - run artillery test(s), feeding in the manifest, the manifests environment to use, and the app's staging route
 
-Think about how this test is run! It may not provide real numbers for your needs. It is being run off a pipeline worker who's network may not reflect reality. It is assumed your your cf environment for staging has parity with your production cf environment. If not, then you are not giving the app a chance to perform. Also how many instances of the app are you running? If only 1(one) instance then your load test is a reflection of what the app itself can do. If you have 3(three) instances running then you are testing how the app performs on the platform.
+Think about how this test is run! It may not provide real numbers for your needs. It is being run off a pipeline worker who's network may not reflect reality. It is assumed your cf environment for staging has parity with your production cf environment. If not, then you are not giving the app a chance to perform. Also how many instances of the app are you running? If only 1(one) instance then your load test is a reflection of what the app itself can do. If you have 3(three) or more instances running then you are testing how the app performs on a highly available platform.
 
 ### Required Values
 	APP_URL: 

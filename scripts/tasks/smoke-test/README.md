@@ -1,6 +1,8 @@
 # dotnet-pipelines/scripts/tasks/smoke-test
 
-The smoke-test task is used to run smoke tests on the app endpoints once pushed to cloud foundry.
+The smoke-test task is used to run smoke tests on the app endpoints once pushed to cloud foundry. I have derived smoke tests from my interactions with Cloud Foundry and it does testing, [Spring pipelines](https://github.com/spring-cloud/spring-cloud-pipelines) documentation, and others. The following is my interpretation of how to set up smoke tests...
+
+Smoke tests validate that a given webapi has been pushed to the platform correctly. If you are at this point, it is assumed that unit testing and integration testing has passed. This test doesn't need to be involved it is simply to confirm the app is live (or correctly staged), has recevied a proper route, and all the intended endpoints are available publicly and/or privately. Like integration testing, smoke tests are not going to validate data integrity. They as just going to make sure the correct http status are being used.
 
 The task has the following steps:
 - validate that all values were correctly provided and file/folder locations exist
