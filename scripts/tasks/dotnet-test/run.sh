@@ -41,7 +41,6 @@ source "${THIS_FOLDER}/../../functions/artifactory.sh"
 #######################################
 #       Setup temporary directories
 #######################################
-mkdir "${THIS_FOLDER}/${ARTIFACT_EXTRACT}" || exit 1
 mkdir "${THIS_FOLDER}/${TEST_EXTRACT}" || exit 1
 
 #######################################
