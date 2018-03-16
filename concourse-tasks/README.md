@@ -9,25 +9,28 @@ I have created a sample project that has all the fixin's. You can use this to pr
 [dotnet framework](https://github.com/ddieruf/log-message-framework45)
 
 Development Versions  
-VSCode: 1.12.2  
-Concourse: 3.8  
-Concourse Fly: 3.8.0  
-Artifactory OSS: 5.8.1  
-SonarQube: 6.7  
-dotnet core runtime: 2.0.3  
-xUnit: 2.3.1  
-Artillery: 1.6.0-12  
-Ubuntu: 16.04  
-Cloud Foundry cli: 6.33.1
+- VSCode: 1.12.2  
+- Concourse: 3.8  
+- Concourse Fly: 3.8.0  
+- Artifactory OSS: 5.8.1  
+- SonarQube: 6.7  
+- dotnet core runtime: 2.0.3  
+- xUnit: 2.3.1  
+- Artillery: 1.6.0-12  
+- Ubuntu: 16.04  
+- Cloud Foundry cli: 6.33.1
 
 ### Prerequisites
 
 [Concourse.io](http://concourse.ci/) - All development was done on a Bosh driven cluster, but you are safe to choose a different flavor.  
+
 [Cloud Foundry](https://www.cloudfoundry.org/) - While you could modify the example piplelines to publish to another platform, why would you? CF is where it's at!  
+
 [Artifactory](https://jfrog.com/artifactory/) - Same as CF, you could build a task to store your artifact else where but I chose Artifactory.
 
 #### Optional tasks
 [Sonarqube](https://www.sonarqube.org/) - Scan your code! You may have not even considered this a step, but I do. Don't relay on your own knowledge of best practice, let Sonarqube scan it and test it against the industrie's practices.  
+
 [Artillery](https://artillery.io/) - Load testing can be a very particular thing. To get real results you want to run it in an exact environment/infrastructure as production. Obviously we can't produce that in this example. So the next best thing is to atleast understand how an individual instance of the app performs under load. THis can be the start of understaning how many instances of the app should be running. Artillery is the tool of choice.
 
 ### Installing
@@ -129,7 +132,7 @@ scenarios:
 #### A project
 
 Refer to the example project linked above. There is a directory structure that is suggested to hold the different solution pieces, but the available customizations in params should let you arrange the solution otherwise.
-
+```
 Project-Name/  
   |-MySolution.sln  
   |-Ci/  
@@ -152,6 +155,7 @@ Project-Name/
     |-Project-Name-Smoke-Test/  
       |-MyProject-Smoke-Test.csproj  
       |-Other-Stuff/
+```
 
 ### Security
 
