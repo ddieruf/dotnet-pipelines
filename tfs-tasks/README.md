@@ -4,7 +4,7 @@ This is going to be cool.
 
 ## Getting Started
 
-This one is not ready yet.
+It's still baking, not quite ready yet.
 
 ### Prerequisites
 

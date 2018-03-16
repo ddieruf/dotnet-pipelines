@@ -54,4 +54,4 @@ cf-prod-space: "" #Cloud Foundry production space for the app
 
 #ARTILLERY INFO
 artillery-environment: "" #https://artillery.io/docs/script-reference/
-artillery-manifest-location-in-solution: "Ci/artillery.yml" #From the sln file, the location of the artillery manifest
+artillery-manifest-location-in-solution: "" #From the sln file, the location of the artillery manifest

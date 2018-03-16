@@ -10,6 +10,18 @@ I have also created sample solutions that utilize this pipeline. I suggest using
 [dotnet core](https://github.com/ddieruf/log-message-core20)  
 [dotnet framework](https://github.com/ddieruf/log-message-framework45)
 
+Development Versions
+VSCode: 1.21.1
+Concourse: 3.8
+Concourse Fly: 3.8.0
+Artifactory OSS: 5.8.1
+SonarQube: 6.7
+dotnet core runtime: 2.1.4
+xUnit: 2.3.1
+Artillery: 1.6.0-12
+Ubuntu: 16.04
+Cloud Foundry cli: 6.33.1
+
 ### Design
 
 I have chosen to rely solely on bash scripts for task execution. I had mixed feelings about doing this, but felt it provided the best solution in the long run. An alternative to this would be, in TFS, to build out my sources to project dependencies (Artifactory, Sonar, etc etc) and then build every task individually in my release definition. Yes it's nice to have everything in the UI but you can only do what the given task has options for. And you are now totally reliant on that tool. Not good.
@@ -39,10 +51,8 @@ These scripts are referenced within the calling pipeline script. Most of these s
 - [generate-version](https://github.com/ddieruf/dotnet-pipelines/tree/master/scripts/tasks/generate-version) - Incrament the build version
 - [scan-code-quality](https://github.com/ddieruf/dotnet-pipelines/tree/master/scripts/tasks/scan-code-quality) - Using SonarQube, scan and pass/fail the code quality
 - [build-and-upload](https://github.com/ddieruf/dotnet-pipelines/tree/master/scripts/tasks/build-and-upload) - Run dotnet publish on each project, archive[zip] the result and upload to Artifactory repo
-- [unit-test](https://github.com/ddieruf/dotnet-pipelines/tree/master/scripts/tasks/unit-test) - Run unit tests on the app. (Follow the link to learn more about how a unit test is defined)
-- [integration-test](https://github.com/ddieruf/dotnet-pipelines/tree/master/scripts/tasks/integration-test) - Run integration tests on the app. (Follow the link to learn more about how an integration test is defined)
+- [dotnet-test](https://github.com/ddieruf/dotnet-pipelines/tree/master/scripts/tasks/dotnet-test) - Run unit|integration|smoke tests on the app. (Follow the link to learn more about how each test is defined)
 - [push-to-cf](https://github.com/ddieruf/dotnet-pipelines/tree/master/scripts/tasks/push-to-cf) - Push the tested app to a given org/space in Cloud Foundry
-- [smoke-test](https://github.com/ddieruf/dotnet-pipelines/tree/master/scripts/tasks/smoke-test) - With the app available via HTTP, run smoke tests. (Follow the link to learn more about how a smoke test is defined)
 - [load-test](https://github.com/ddieruf/dotnet-pipelines/tree/master/scripts/tasks/load-test) - With the app available via HTTP, using Artillery, run load tests
 
 ## Deployment
@@ -51,7 +61,7 @@ In the given CI/CD tool folder, you will find specifics about installing (ie if 
 
 ## Versioning
 
-I use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/ddieruf/dotnet-pipelines/tags). 
+I use [SemVer](http://semver.org/) for versioning. For the versions available, see the [branches on this repository](https://github.com/ddieruf/dotnet-pipelines/branches). 
 
 ## Authors
 
