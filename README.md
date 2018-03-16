@@ -59,6 +59,14 @@ These scripts are referenced within the calling pipeline script. Most of these s
 
 In the given CI/CD tool folder, you will find specifics about installing (ie if you are using concourse, look in the concourse-tasks/readme.md).
 
+## Roadmap
+
+Some features and additions I am working on:
+- Windows workers in the pipeline
+- Save artifact to TFS instead of Artifactory
+- Powershell version of all script tasks
+- Additional task to do security scan using [Checkmarx](https://www.checkmarx.com/)
+
 ## Versioning
 
 I use [SemVer](http://semver.org/) for versioning. For the versions available, see the [branches on this repository](https://github.com/ddieruf/dotnet-pipelines/branches). 
