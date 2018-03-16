@@ -16,9 +16,10 @@ TASK_SCRIPTS_RESOURCE="task-scripts"
 #ARTIFACTORY_HOST
 #ARTIFACTORY_TOKEN
 #ARTIFACTORY_REPO_ID
-#APP_UNIT_TEST_DLL_NAME
-export UNIT_TEST_ARTIFACT_NAME="${UNIT_TEST_ARTIFACT_NAME}"
-source "${ROOT_FOLDER}/${TASK_SCRIPTS_RESOURCE}/tasks/unit-test/run.sh"
+#DOTNET_VERSION
+export TEST_DLL_NAME="${UNIT_TEST_DLL_NAME}"
+export TEST_ARTIFACT_NAME="${UNIT_TEST_ARTIFACT_NAME}"
+source "${ROOT_FOLDER}/${TASK_SCRIPTS_RESOURCE}/tasks/dotnet-test/run.sh"
 
 #######################################
 #       Finalize task

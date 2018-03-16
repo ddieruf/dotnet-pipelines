@@ -16,10 +16,11 @@ TASK_SCRIPTS_RESOURCE="task-scripts"
 #ARTIFACTORY_HOST
 #ARTIFACTORY_TOKEN
 #ARTIFACTORY_REPO_ID
-#APP_UNIT_TEST_DLL_NAME
+#DOTNET_VERSION
 export APP_URL="${STAGE_APP_URLS}"
-export SMOKE_TEST_ARTIFACT_NAME="${SMOKE_TEST_ARTIFACT_NAME}"
-source "${ROOT_FOLDER}/${TASK_SCRIPTS_RESOURCE}/tasks/smoke-test/run.sh"
+export TEST_DLL_NAME="${SMOKE_TEST_DLL_NAME}"
+export TEST_ARTIFACT_NAME="${SMOKE_TEST_ARTIFACT_NAME}"
+source "${ROOT_FOLDER}/${TASK_SCRIPTS_RESOURCE}/tasks/dotnet-test/run.sh"
 
 #######################################
 #       Finalize task
