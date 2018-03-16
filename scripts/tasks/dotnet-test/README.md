@@ -17,9 +17,13 @@ Integration testing should test every public method in my Contollers folder. The
 
 Thus, integration tests require some type of web server (either in memory or for real) for the contoller methods to be tested but are not interested in data integrity. They just validate the endpoint is working correctly and respond with correct status codes.
 
+"I looked at your example dotnet framework project and there is no integration test!"  
+It's a dirty little secret of mine. To run the test you need an in memory web server to spin up the app, so it can hit the endpoints. We are running the build tasks in Linux. This is not going to end well. One of my next steps with this pipeline is to run on either Linux and/or Windows workers. Then all will be happy.
+
 ### Smoke Test
 Smoke tests validate that a given webapi has been pushed to the platform correctly. If you are at this point, it is assumed that unit testing and integration testing has passed. This test doesn't need to be involved it is simply to confirm the app is live (or correctly staged), has recevied a proper route, and all the intended endpoints are available publicly and/or privately. Like integration testing, smoke tests are not going to validate data integrity. They as just going to make sure the correct http status are being used.
 
+### Task Steps
 The task has the following steps:
 - validate that all values were correctly provided and file/folder locations exist
 - install the needed cli's dotnet, mono, and artifactory

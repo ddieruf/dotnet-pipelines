@@ -31,7 +31,7 @@ Development Versions
 #### Optional tasks
 [Sonarqube](https://www.sonarqube.org/) - Scan your code! You may have not even considered this a step, but I do. Don't relay on your own knowledge of best practice, let Sonarqube scan it and test it against the industrie's practices.  
 
-[Artillery](https://artillery.io/) - Load testing can be a very particular thing. To get real results you want to run it in an exact environment/infrastructure as production. Obviously we can't produce that in this example. So the next best thing is to atleast understand how an individual instance of the app performs under load. THis can be the start of understaning how many instances of the app should be running. Artillery is the tool of choice.
+[Artillery](https://artillery.io/) - Load testing can be a very particular thing. To get real results you want to run it in an exact environment/infrastructure as production. Obviously we can't produce that in this example. So the next best thing is to atleast understand how an individual instance of the app performs under load. This can be the start of understaning how many instances of the app should be running. Artillery is the tool of choice.
 
 ### Installing
 
