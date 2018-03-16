@@ -44,8 +44,9 @@ I am not going to get into install Concourse or any of the other pre-requ's. Tha
 
 #### Pipeline Definition
 
-The file concourse-pipeline.yml contains an example pipeline that uses all avaiable steps. An example pipeline deployment from the root Project-Name folder, in Concourse:
+The file concourse-pipeline.yml contains an example pipeline that uses all avaiable steps. An example pipeline deployment:
 
+In a Linux terminal:
 ```
 fly -t con set-pipeline \
   --config concourse-pipeline.yml \
@@ -62,7 +63,25 @@ fly -t con set-pipeline \
   --var "cf-prod-password=XXXXXX" \
   --var "github-username=XXXXXX" \
   --var "github-password=XXXXXX"
+```
 
+In Windows powershell:
+```
+fly -t con set-pipeline `
+  --config concourse-pipeline.yml `
+  --pipeline my-pipeline-name `
+  --load-vars-from concourse-params.yml `
+  --var "github-private-key=$(Get-Content -Path ./github-private-key.key -Encoding UTF8 -Raw)" `
+  --var "artifactory-token=XXXXXX" `
+  --var "sonar-login-key=XXXXXX" `
+  --var "cf-stage-api-url=https://api.system.mydomain.com" `
+  --var "cf-stage-username=XXXXXX" `
+  --var "cf-stage-password=XXXXXX" `
+  --var "cf-prod-api-url=https://api.system.mydomain.com" `
+  --var "cf-prod-username=XXXXXX" `
+  --var "cf-prod-password=XXXXXX" `
+  --var "github-username=XXXXXX" `
+  --var "github-password=XXXXXX"
 ```
 
 #### Params Definition
