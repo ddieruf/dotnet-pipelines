@@ -32,11 +32,5 @@ outputs:
   - name: out
   - name: keyvalout
   
-#run:
-#  path: dotnet-pipelines/concourse-tasks/build-and-upload/task.sh
 run:
-  path: sh
-  args:
-  - |
-    la -l
-    dotnet-pipelines/concourse-tasks/build-and-upload/task.sh
+  path: dotnet-pipelines/concourse-tasks/build-and-upload/task.sh
