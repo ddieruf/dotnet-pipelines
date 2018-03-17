@@ -5,10 +5,12 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: ubuntu #pivotalservices/docker-concourse-cf-tools
-    tag: 16.04 #latest
+    repository: ubuntu
+    tag: 16.04
 
 params:
+  ARTIFACT_LOCATION_TYPE:
+  ARTIFACT_FOLDER_PATH:
   CF_STAGE_ORG:
   CF_STAGE_PASSWORD:
   CF_STAGE_SPACE:

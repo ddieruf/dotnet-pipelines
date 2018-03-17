@@ -101,7 +101,7 @@ jobs:
     params:
       <<: *dotnet-solution-params
       <<: *dotnet-params
-      <<: *artifactory-params
+      <<: *artifact-params
       <<: *cloud-foundry-params
   - put: keyval
     params:
@@ -122,7 +122,7 @@ jobs:
     params:
       <<: *dotnet-params
       <<: *dotnet-solution-params
-      <<: *artifactory-params
+      <<: *artifact-params
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -142,7 +142,7 @@ jobs:
     params:
       <<: *dotnet-params
       <<: *dotnet-solution-params
-      <<: *artifactory-params
+      <<: *artifact-params
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -160,7 +160,7 @@ jobs:
   - task: push-to-cf-stage
     file: dotnet-pipelines/concourse-tasks/push-to-cf-stage/task.yml
     params:
-      <<: *artifactory-params
+      <<: *artifact-params
       <<: *cloud-foundry-params
   - put: keyval
     params:
@@ -181,7 +181,7 @@ jobs:
     params:
       <<: *dotnet-params
       <<: *dotnet-solution-params
-      <<: *artifactory-params
+      <<: *artifact-params
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -200,7 +200,7 @@ jobs:
     file: dotnet-pipelines/concourse-tasks/load-test/task.yml
     params:
       <<: *artillery-params
-      <<: *artifactory-params
+      <<: *artifact-params
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -218,7 +218,7 @@ jobs:
   - task: push-to-cf-prod
     file: dotnet-pipelines/concourse-tasks/push-to-cf-prod/task.yml
     params:
-      <<: *artifactory-params
+      <<: *artifact-params
       <<: *cloud-foundry-params
   - put: keyval
     params:
@@ -270,7 +270,9 @@ dotnet-solution-params: &dotnet-solution-params
   CF_PROD_MANIFEST_LOCATION: ((cf-prod-manifest-location-in-solution))
   ARTILLERY_MANIFEST_LOCATION: ((artillery-manifest-location-in-solution))
 
-artifactory-params: &artifactory-params
+artifact-params: &artifact-params
+  ARTIFACT_LOCATION_TYPE: ((artifact-location-type))
+  ARTIFACT_FOLDER_PATH: ((artifact-folder-path))
   ARTIFACTORY_REPO_ID: ((artifactory-repo-id))
   ARTIFACTORY_HOST: ((articatory-host))
   ARTIFACTORY_TOKEN: ((artifactory-token))

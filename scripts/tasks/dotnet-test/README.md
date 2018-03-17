@@ -26,20 +26,23 @@ Smoke tests validate that a given webapi has been pushed to the platform correct
 ### Task Steps
 The task has the following steps:
 - validate that all values were correctly provided and file/folder locations exist
-- install the needed cli's dotnet, mono, and artifactory
-- download and extract the integration test archive from artifactory
+- install the needed cli's
+- retrieve the test artifact
+- extract the artifact
 - run dotnet test on the project dll
 
 ### Required Values
-	ARTIFACTORY_HOST: The URL to access artifactory
-	ARTIFACTORY_TOKEN: https://www.jfrog.com/confluence/display/RTF/Access+Tokens#AccessTokens-UsingTokens
-	ARTIFACTORY_REPO_ID: The identifying key of the Artifactory repo associated with the solution
 	TEST_ARTIFACT_NAME - The artifact name created from running the build-and-uplaod task
 	TEST_DLL_NAME - The dll name of the artifact test project
 	DOTNET_VERSION: Dotnet cli version https://github.com/dotnet/core/releases
+	ARTIFACT_LOCATION_TYPE: Where to save the artifacts, supported values are ```local``` or ```artifactory```
 
 ### Optional Values
 	APP_URL: The app's route to use in smoke tests
+	ARTIFACTORY_HOST: The URL to access artifactory. Required if ```ARTIFACT_LOCATION_TYPE==artifactory```
+	ARTIFACTORY_TOKEN: https://www.jfrog.com/confluence/display/RTF/Access+Tokens#AccessTokens-UsingTokens Required if ```ARTIFACT_LOCATION_TYPE==artifactory```
+	ARTIFACTORY_REPO_ID: The identifying key of the Artifactory repo associated with the solution. Required if ```ARTIFACT_LOCATION_TYPE==artifactory```
+	ARTIFACT_FOLDER_PATH: Where to save the newly created artifact. Required if ```ARTIFACT_LOCATION_TYPE==local```
 
 ### Output Values
 	none

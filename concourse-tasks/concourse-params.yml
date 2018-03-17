@@ -10,10 +10,12 @@ github-private-key: ""
 
 ####################
 
-#ARTIFACTORY INFO
-artifactory-repo-id: "" #The identifying key of the Artifactory repo associated with the solution
-articatory-host: "" #The URL to access aartifactory
-artifactory-token: "" #https://www.jfrog.com/confluence/display/RTF/Access+Tokens#AccessTokens-UsingTokens
+#ARTIFACT INFO
+artifact-location-type: "" #A value of either local or artifactory
+artifact-folder-path: "" #The absolute path to where the artifact should be stored. Required if location-type==local
+artifactory-repo-id: "" #The identifying key of the Artifactory repo associated with the solution. Required if location-type==artifactory
+articatory-host: "" #The URL to access aartifactory. Required if location-type==artifactory
+artifactory-token: "" #https://www.jfrog.com/confluence/display/RTF/Access+Tokens#AccessTokens-UsingTokens. Required if location-type==artifactory
 
 #SONARQUBE INFO
 sonar-project-key: "" #The identifying key of the SonarQube project associated with the solution

@@ -5,13 +5,11 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: ubuntu #microsoft/dotnet
-    tag: 16.04 #latest
+    repository: ubuntu
+    tag: 16.04
 
 params:
-  ARTIFACTORY_REPO_ID:
-  ARTIFACTORY_TOKEN:
-  ARTIFACTORY_HOST:
+  ARTIFACT_LOCATION_TYPE:
   SRC_CSPROJ_LOCATION_IN_SOLUTION:
   UNIT_TEST_CSPROJ_LOCATION_IN_SOLUTION:
   INTEGRATION_TEST_CSPROJ_LOCATION_IN_SOLUTION:
@@ -20,6 +18,10 @@ params:
   CF_PROD_MANIFEST_LOCATION:
   ARTILLERY_MANIFEST_LOCATION:
   DOTNET_VERSION:
+  ARTIFACTORY_REPO_ID:
+  ARTIFACTORY_TOKEN:
+  ARTIFACTORY_HOST:
+  ARTIFACT_FOLDER_PATH:
 
 inputs:
   - name: src-and-test
@@ -30,5 +32,11 @@ outputs:
   - name: out
   - name: keyvalout
   
+#run:
+#  path: dotnet-pipelines/concourse-tasks/build-and-upload/task.sh
 run:
-  path: dotnet-pipelines/concourse-tasks/build-and-upload/task.sh
+  path: sh
+  args:
+  - |
+    la -l
+    dotnet-pipelines/concourse-tasks/build-and-upload/task.sh
