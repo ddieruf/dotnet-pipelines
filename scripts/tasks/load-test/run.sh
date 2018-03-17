@@ -52,7 +52,7 @@ esac
 source "${THIS_FOLDER}/../../functions/artillery.sh"
 source "${THIS_FOLDER}/../../functions/zip.sh"
 
-if [[ "${ARTIFACT_LOCATION_TYPE}" -eq "artifactory" ]]; then
+if [[ "${ARTIFACT_LOCATION_TYPE}" == "artifactory" ]]; then
   source "${THIS_FOLDER}/../../functions/artifactory.sh"
 fi
 

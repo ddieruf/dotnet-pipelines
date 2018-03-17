@@ -82,7 +82,7 @@ source "${THIS_FOLDER}/../../functions/dotnet.sh" --version ${DOTNET_VERSION}
 source "${THIS_FOLDER}/../../functions/mono.sh"
 source "${THIS_FOLDER}/../../functions/zip.sh"
 
-if [[ "${ARTIFACT_LOCATION_TYPE}" -eq "artifactory" ]]; then
+if [[ "${ARTIFACT_LOCATION_TYPE}" == "artifactory" ]]; then
   source "${THIS_FOLDER}/../../functions/artifactory.sh"
 fi
 
