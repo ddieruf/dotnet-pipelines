@@ -83,11 +83,11 @@ set -x #echo all commands
 case "${ARTIFACT_LOCATION_TYPE}" in
   "local")
     #copy the zip to PWD
-    cp "${ARTIFACT_FOLDER_PATH}/${SRC_ARTIFACT_NAME}" "${ROOT_FOLDER}"
+    cp "${ARTIFACT_FOLDER_PATH}/${SRC_ARTIFACT_NAME}" "${THIS_FOLDER}"
     ;;
   "artifactory")
     #download the zip to PWD
-    downloadAppArtifact "${ARTIFACTORY_HOST}" "${ARTIFACTORY_TOKEN}" "${ARTIFACTORY_REPO_ID}" "${SRC_ARTIFACT_NAME}"
+    downloadAppArtifact "${ARTIFACTORY_HOST}" "${ARTIFACTORY_REPO_ID}" "${ARTIFACTORY_TOKEN}" "${SRC_ARTIFACT_NAME}"
     if [[ $? -eq 1 ]]; then
       echo "ERROR: downloadAppArtifact"
       exit 1
@@ -99,7 +99,7 @@ case "${ARTIFACT_LOCATION_TYPE}" in
 esac
 
 echo "Extracting artifact"
-extractAppArtifact "zip" "${ROOT_FOLDER}/${SRC_ARTIFACT_NAME}" "${ROOT_FOLDER}/${TEST_EXTRACT}"
+extractAppArtifact "zip" "${SRC_ARTIFACT_NAME}" "${ROOT_FOLDER}/${TEST_EXTRACT}"
 if [[ $? -eq 1 ]]; then
   echo "ERROR: extractAppArtifact"
   exit 1

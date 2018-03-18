@@ -61,7 +61,7 @@ fi
 #######################################
 #       Setup temporary directories
 #######################################
-mkdir "${THIS_FOLDER}/${TEST_EXTRACT}" || exit 1
+mkdir "${ROOT_FOLDER}/${TEST_EXTRACT}" || exit 1
 
 #######################################
 #       Begin task
@@ -75,7 +75,7 @@ case "${ARTIFACT_LOCATION_TYPE}" in
     ;;
   "artifactory")
     #download the zip to PWD
-    downloadAppArtifact "${ARTIFACTORY_HOST}" "${ARTIFACTORY_TOKEN}" "${ARTIFACTORY_REPO_ID}" "${TEST_ARTIFACT_NAME}"
+    downloadAppArtifact "${ARTIFACTORY_HOST}" "${ARTIFACTORY_REPO_ID}" "${ARTIFACTORY_TOKEN}" "${TEST_ARTIFACT_NAME}"
     if [[ $? -eq 1 ]]; then
       echo "ERROR: downloadAppArtifact"
       exit 1
@@ -87,14 +87,14 @@ case "${ARTIFACT_LOCATION_TYPE}" in
 esac
 
 echo "Extracting artifact"
-extractAppArtifact "zip" "${TEST_ARTIFACT_NAME}" "${THIS_FOLDER}/${TEST_EXTRACT}"
+extractAppArtifact "zip" "${TEST_ARTIFACT_NAME}" "${ROOT_FOLDER}/${TEST_EXTRACT}"
 if [[ $? -eq 1 ]]; then
   echo "ERROR: extractAppArtifact"
   exit 1
 fi
 
 echo "Running test"
-testProject "${THIS_FOLDER}/${TEST_EXTRACT}/${TEST_DLL_NAME}"
+testProject "${ROOT_FOLDER}/${TEST_EXTRACT}/${TEST_DLL_NAME}"
 if [[ $? -eq 1 ]]; then
   echo "ERROR: testProject"
   exit 1
