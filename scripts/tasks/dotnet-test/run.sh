@@ -87,7 +87,7 @@ case "${ARTIFACT_LOCATION_TYPE}" in
 esac
 
 echo "Extracting artifact"
-extractAppArtifact "zip" "${THIS_FOLDER}/${TEST_ARTIFACT_NAME}" "${THIS_FOLDER}/${TEST_EXTRACT}"
+extractAppArtifact "zip" "${TEST_ARTIFACT_NAME}" "${THIS_FOLDER}/${TEST_EXTRACT}"
 if [[ $? -eq 1 ]]; then
   echo "ERROR: extractAppArtifact"
   exit 1
