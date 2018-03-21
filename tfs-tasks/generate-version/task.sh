@@ -25,8 +25,9 @@ echo "New version number: ${NEW_VERSION_NUMBER}"
 
 echo "##vso[task.setvariable variable=MY_OUTPUT_VAR]${NEW_VERSION_NUMBER}"
 
-echo "Path 1: ${BUILD_ARTIFACTSTAGINGDIRECTORY}"
 echo "Folder path: ${ARTIFACT_FOLDER_PATH}"
+
+env
 
 #######################################
 #       Finalize task
