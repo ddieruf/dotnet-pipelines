@@ -3,9 +3,11 @@
 set -o errexit
 set -o errtrace
 
-ROOT_FOLDER="${AGENT_RELEASEDIRECTORY}"
-TASK_SCRIPTS_RESOURCE="task-scripts"
-SRC_AND_TEST_RESOURCE="src-and-test"
+ROOT_FOLDER="${SYSTEM_DEFAULTWORKINGDIRECTORY}"
+ARTIFACT_ROOT="${SYSTEM_ARTIFACTSDIRECTORY}"
+PIPELINE_RESOURCE="dotnet-pipelines"
+TASK_SCRIPTS_RESOURCE="${PIPELINE_RESOURCE}/scripts"
+SRC_VERSION_RESOURCE="src-and-test"
 
 #######################################
 #       Initialize Task
@@ -25,6 +27,7 @@ export PIPELINE_VERSION="${PIPELINE_VERSION}"
 
 export ARTIFACT_FOLDER_PATH="${BUILD_ARTIFACTSTAGINGDIRECTORY}"
 
+exit 1
 source "${ROOT_FOLDER}/${TASK_SCRIPTS_RESOURCE}/tasks/build-and-upload/run.sh"
 
 export SRC_ARTIFACT_NAME="${SRC_ARTIFACT_NAME}"
