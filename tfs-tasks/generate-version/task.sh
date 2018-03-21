@@ -24,7 +24,9 @@ source "${ARTIFACT_ROOT}/${TASK_SCRIPTS_RESOURCE}/tasks/generate-version/run.sh"
 echo "New version number: ${NEW_VERSION_NUMBER}"
 
 echo "##vso[task.setvariable variable=MY_OUTPUT_VAR]${NEW_VERSION_NUMBER}"
-echo "${ARTIFACT_FOLDER_PATH}"
+
+echo "Path 1: ${BUILD_ARTIFACTSTAGINGDIRECTORY}"
+echo "Folder path: ${ARTIFACT_FOLDER_PATH}"
 
 #######################################
 #       Finalize task
