@@ -3,7 +3,7 @@
 set -o errexit
 set -o errtrace
 
-ROOT_FOLDER="${AGENT_WORKFOLDER}"
+ROOT_FOLDER="${SYSTEM_DEFAULTWORKINGDIRECTORY}"
 ARTIFACT_ROOT="${SYSTEM_ARTIFACTSDIRECTORY}"
 PIPELINE_RESOURCE="dotnet-pipelines"
 TASK_SCRIPTS_RESOURCE="${PIPELINE_RESOURCE}/scripts"
@@ -24,7 +24,7 @@ source "${ARTIFACT_ROOT}/${TASK_SCRIPTS_RESOURCE}/tasks/generate-version/run.sh"
 echo "New version number: ${NEW_VERSION_NUMBER}"
 
 echo "##vso[task.setvariable variable=VERSION_NUM]${NEW_VERSION_NUMBER}"
-echo "Saved version: ${VERSION_NUM}"
+
 #######################################
 #       Finalize task
 #######################################
