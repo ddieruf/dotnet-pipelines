@@ -25,7 +25,7 @@ echo "New version number: ${NEW_VERSION_NUMBER}"
 
 echo "##vso[task.setvariable variable=MY_OUTPUT_VAR]${NEW_VERSION_NUMBER}"
 
-echo "Folder path: ${ARTIFACT_FOLDER_PATH}"
+echo "Folder path: ${!ARTIFACT_FOLDER_PATH}"
 
 env
 
