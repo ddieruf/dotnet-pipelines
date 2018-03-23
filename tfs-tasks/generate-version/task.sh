@@ -25,7 +25,7 @@ source "${ROOT_FOLDER}/${TASK_SCRIPTS_RESOURCE}/tasks/generate-version/run.sh"
 
 echo "New version number: ${NEW_VERSION_NUMBER}"
 
-echo "##vso[task.setvariable variable=MY_OUTPUT_VAR;isSecret=false;isOutput=true;]12345"
+echo "##vso[task.setvariable variable=NEW_VERSION_NUMBER;isSecret=false;isOutput=true;]${NEW_VERSION_NUMBER}"
 
 #######################################
 #       Finalize task
