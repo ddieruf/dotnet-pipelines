@@ -44,6 +44,7 @@ echo "${TAG}" > "${ROOT_FOLDER}/${SRC_AND_TEST_RESOURCE}/tag"
 
 echo "##vso[task.setvariable variable=SRC_ARTIFACT_NAME;isSecret=false;isOutput=true;]${SRC_ARTIFACT_NAME}"
 
+
 #######################################
 #       Finalize task
 #######################################
