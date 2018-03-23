@@ -42,6 +42,8 @@ echo "Tagging the project with build tag [${TAG}]"
 echo "${TAG}" > "${ROOT_FOLDER}/${SRC_AND_TEST_RESOURCE}/tag"
 #cp -r "${ROOT_FOLDER}/${SRC_AND_TEST_RESOURCE}"/. "${ROOT_FOLDER}/${OUTPUT_RESOURCE}/"
 
+echo "##vso[task.setvariable variable=SRC_ARTIFACT_NAME;isSecret=false;isOutput=true;]${SRC_ARTIFACT_NAME}"
+
 #######################################
 #       Finalize task
 #######################################
