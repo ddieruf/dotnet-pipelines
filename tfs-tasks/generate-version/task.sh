@@ -29,6 +29,7 @@ echo "Folder path: ${ARTIFACT_FOLDER_PATH}"
 
 env
 
+
 #######################################
 #       Finalize task
 #######################################
