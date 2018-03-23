@@ -18,7 +18,7 @@ SRC_VERSION_RESOURCE="src-and-test"
 #       Run Task
 #######################################
 export VERSION_ROOT="${ARTIFACT_ROOT}/${SRC_VERSION_RESOURCE}"
-export ARTIFACT_FOLDER_PATH=${BUILD_ARTIFACTSTAGINGDIRECTORY}
+export ARTIFACT_FOLDER_PATH=${ROOT_FOLDER}
 #GIT_EMAIL
 #GIT_NAME
 source "${ROOT_FOLDER}/${TASK_SCRIPTS_RESOURCE}/tasks/generate-version/run.sh"
@@ -27,7 +27,6 @@ echo "New version number: ${NEW_VERSION_NUMBER}"
 
 echo "##vso[task.setvariable variable=MY_OUTPUT_VAR]${NEW_VERSION_NUMBER}"
 
-echo "Folder path: ${BUILD_ARTIFACTSTAGINGDIRECTORY}"
 echo "Folder path: ${ARTIFACT_FOLDER_PATH}"
 
 #######################################
