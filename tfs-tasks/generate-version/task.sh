@@ -7,7 +7,7 @@ ROOT_FOLDER="${SYSTEM_DEFAULTWORKINGDIRECTORY}"
 ARTIFACT_ROOT="${SYSTEM_ARTIFACTSDIRECTORY}"
 PIPELINE_RESOURCE="dotnet-pipelines"
 TASK_SCRIPTS_RESOURCE="${PIPELINE_RESOURCE}/scripts"
-SRC_VERSION_RESOURCE="src-and-test"
+SRC_AND_TEST_RESOURCE="src-and-test"
 
 
 #######################################
@@ -17,8 +17,7 @@ SRC_VERSION_RESOURCE="src-and-test"
 #######################################
 #       Run Task
 #######################################
-export VERSION_ROOT="${ARTIFACT_ROOT}/${SRC_VERSION_RESOURCE}"
-export ARTIFACT_FOLDER_PATH=${ROOT_FOLDER}
+export VERSION_ROOT="${ARTIFACT_ROOT}/${SRC_AND_TEST_RESOURCE}"
 #GIT_EMAIL
 #GIT_NAME
 source "${ROOT_FOLDER}/${TASK_SCRIPTS_RESOURCE}/tasks/generate-version/run.sh"
