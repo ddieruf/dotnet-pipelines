@@ -20,7 +20,7 @@ SRC_AND_TEST_RESOURCE="src-and-test"
 export VERSION_ROOT="${ARTIFACT_ROOT}/${SRC_AND_TEST_RESOURCE}"
 #GIT_EMAIL
 #GIT_NAME
-source "${ROOT_FOLDER}/${TASK_SCRIPTS_RESOURCE}/tasks/generate-version/run.sh"
+source "${ARTIFACT_ROOT}/${TASK_SCRIPTS_RESOURCE}/tasks/generate-version/run.sh"
 
 echo "New version number: ${NEW_VERSION_NUMBER}"
 

@@ -39,9 +39,9 @@ export CF_PROD_MANIFEST_PATH="${ARTIFACT_ROOT}/${SRC_AND_TEST_RESOURCE}/${CF_PRO
 if [[ ! -z "${ARTILLERY_MANIFEST_LOCATION}" ]]; then
 	export ARTILLERY_MANIFEST_PATH="${ARTIFACT_ROOT}/${SRC_AND_TEST_RESOURCE}/${ARTILLERY_MANIFEST_LOCATION}"
 fi
-export ARTIFACT_FOLDER_PATH="${AGENT_TEMPDIRECTORY}"
+export ARTIFACT_FOLDER_PATH="${SYSTEM_DEFAULTWORKINGDIRECTORY}"
 
-source "${ROOT_FOLDER}/${TASK_SCRIPTS_RESOURCE}/tasks/build-and-upload/run.sh"
+source "${ARTIFACT_ROOT}/${TASK_SCRIPTS_RESOURCE}/tasks/build-and-upload/run.sh"
 
 echo "##vso[task.setvariable variable=SRC_ARTIFACT_NAME;isSecret=false;isOutput=true;]${SRC_ARTIFACT_NAME}"
 echo "##vso[task.setvariable variable=UNIT_TEST_ARTIFACT_NAME;isSecret=false;isOutput=true;]${UNIT_TEST_ARTIFACT_NAME}"
