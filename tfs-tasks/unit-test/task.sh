@@ -7,8 +7,9 @@ ROOT_FOLDER="${SYSTEM_DEFAULTWORKINGDIRECTORY}"
 ARTIFACT_ROOT="${SYSTEM_ARTIFACTSDIRECTORY}"
 PIPELINE_RESOURCE="dotnet-pipelines"
 TASK_SCRIPTS_RESOURCE="${PIPELINE_RESOURCE}/scripts"
-SRC_AND_TEST_RESOURCE="src-and-test"
+SRC_AND_TEST_RESOURCE="src-and-test/drop"
 
+env
 #######################################
 #       Initialize Task
 #######################################
