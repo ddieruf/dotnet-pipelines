@@ -40,7 +40,7 @@ export CF_PROD_MANIFEST_PATH="${ARTIFACT_ROOT}/${SRC_AND_TEST_RESOURCE}/${CF_PRO
 if [[ ! -z "${ARTILLERY_MANIFEST_LOCATION}" ]]; then
 	export ARTILLERY_MANIFEST_PATH="${ARTIFACT_ROOT}/${SRC_AND_TEST_RESOURCE}/${ARTILLERY_MANIFEST_LOCATION}"
 fi
-export ARTIFACT_FOLDER_PATH="${SYSTEM_ARTIFACTSDIRECTORY}"
+export ARTIFACT_FOLDER_PATH="${ARTIFACT_ROOT}"
 
 source "${ARTIFACT_ROOT}/${TASK_SCRIPTS_RESOURCE}/tasks/build-and-upload/run.sh"
 
@@ -49,6 +49,7 @@ echo "##vso[task.setvariable variable=UNIT_TEST_ARTIFACT_NAME;isSecret=false;isO
 echo "##vso[task.setvariable variable=INTEGRATION_TEST_ARTIFACT_NAME;isSecret=false;isOutput=true;]${INTEGRATION_TEST_ARTIFACT_NAME}"
 echo "##vso[task.setvariable variable=SMOKE_TEST_ARTIFACT_NAME;isSecret=false;isOutput=true;]${SMOKE_TEST_ARTIFACT_NAME}"
 
+ls -l ${ARTIFACT_FOLDER_PATH}
 #add tag to repo
 #TAG="build/${PIPELINE_VERSION}"
 #echo "Tagging the project with build tag [${TAG}]"
