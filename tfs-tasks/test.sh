@@ -3,17 +3,9 @@
 set -o errexit
 set -o errtrace
 
-ls
 
-ROOT_FOLDER="${SYSTEM_DEFAULTWORKINGDIRECTORY}"
-ARTIFACT_ROOT="${SYSTEM_ARTIFACTSDIRECTORY}"
-PIPELINE_RESOURCE="dotnet-pipelines"
-TASK_SCRIPTS_RESOURCE="${PIPELINE_RESOURCE}/scripts"
-SRC_AND_TEST_RESOURCE="Test-Pipelines"
-
-
-git clone "${BUILD_SOURCESDIRECTORY}" "${AGENT_WORKFOLDER}/src-and-test"
-pushd "${AGENT_WORKFOLDER}/src-and-test"
+#git clone "${BUILD_SOURCESDIRECTORY}" "${AGENT_WORKFOLDER}/src-and-test"
+pushd "${BUILD_SOURCESDIRECTORY}"
   git config --local user.email "my@email.com"
   git config --local user.name "My Name"
 
@@ -24,4 +16,4 @@ pushd "${AGENT_WORKFOLDER}/src-and-test"
   git commit -m "Commit this file"
 popd
 
-ls -l "${AGENT_WORKFOLDER}/src-and-test"
+ls -l "${BUILD_SOURCESDIRECTORY}"
