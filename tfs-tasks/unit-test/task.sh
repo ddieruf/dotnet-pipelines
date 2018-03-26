@@ -24,8 +24,8 @@ SRC_AND_TEST_RESOURCE="src-and-test/drop"
 
 export TEST_DLL_NAME="${UNIT_TEST_DLL_NAME}"
 export ARTIFACT_FOLDER_PATH="${ARTIFACT_ROOT}/${SRC_AND_TEST_RESOURCE}"
-export TEST_ARTIFACT_NAME=$(find ./${ARTIFACT_FOLDER_PATH} -name '*UnitTest*')
-echo ${TEST_ARTIFACT_NAME}
+export TEST_ARTIFACT_NAME=$(find ${ARTIFACT_FOLDER_PATH} -name '*UnitTests*')
+echo "Name: ${TEST_ARTIFACT_NAME}"
 
 source "${ARTIFACT_ROOT}/${TASK_SCRIPTS_RESOURCE}/tasks/dotnet-test/run.sh"
 
