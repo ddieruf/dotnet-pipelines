@@ -12,9 +12,9 @@ TASK_SCRIPTS_RESOURCE="${PIPELINE_RESOURCE}/scripts"
 SRC_AND_TEST_RESOURCE="Test-Pipelines"
 
 
-git clone "${ARTIFACT_ROOT}/${SRC_AND_TEST_RESOURCE}" "${ARTIFACT_ROOT}/updated-version"
-pushd "${ARTIFACT_ROOT}/updated-version"
-  git config --local user.email "my@emai.com"
+git clone "${BUILD_SOURCESDIRECTORY}" "${AGENT_WORKFOLDER}"
+pushd "${AGENT_WORKFOLDER}"
+  git config --local user.email "my@email.com"
   git config --local user.name "My Name"
 
   touch version
@@ -24,4 +24,4 @@ pushd "${ARTIFACT_ROOT}/updated-version"
   git commit -m "Commit this file"
 popd
 
-ls -l "${ARTIFACT_ROOT}/updated-version"
+ls -l "${AGENT_WORKFOLDER}"
