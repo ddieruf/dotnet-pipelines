@@ -39,6 +39,7 @@ function downloadAppArtifact() {
 	local artifactoryRepoName="${2}"
 	local artifactoryApiKey="${3}"
 	local artifactFileName="${4}"
+	local downloadLocation="${5}"
 
 	testHost "${artifactoryHost}"
 	if [[ $? -eq 1 ]]; then
@@ -50,7 +51,8 @@ function downloadAppArtifact() {
 
 	(curl \
 		-H "X-JFrog-Art-Api: ${artifactoryApiKey}" \
-		-O "${targetFolderUrl}/${artifactFileName}") || (echo "Failed downloading artifact." && exit 1)
+		-O "${targetFolderUrl}/${artifactFileName}" \
+		-o "${downloadLocation}/${artifactFileName}") || (echo "Failed downloading artifact." && exit 1)
 
 	return 0
 }
