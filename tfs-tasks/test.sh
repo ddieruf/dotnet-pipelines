@@ -12,8 +12,8 @@ TASK_SCRIPTS_RESOURCE="${PIPELINE_RESOURCE}/scripts"
 SRC_AND_TEST_RESOURCE="Test-Pipelines"
 
 
-git clone "${BUILD_SOURCESDIRECTORY}" "${AGENT_WORKFOLDER}"
-pushd "${AGENT_WORKFOLDER}"
+git clone "${BUILD_SOURCESDIRECTORY}" "${AGENT_WORKFOLDER}/src-and-test"
+pushd "${AGENT_WORKFOLDER}/src-and-test"
   git config --local user.email "my@email.com"
   git config --local user.name "My Name"
 
@@ -24,4 +24,4 @@ pushd "${AGENT_WORKFOLDER}"
   git commit -m "Commit this file"
 popd
 
-ls -l "${AGENT_WORKFOLDER}"
+ls -l "${AGENT_WORKFOLDER}/src-and-test"
