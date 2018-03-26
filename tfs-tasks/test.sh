@@ -7,6 +7,7 @@ set -o errtrace
 #git clone "${BUILD_SOURCESDIRECTORY}" "${AGENT_WORKFOLDER}/src-and-test"
 pushd "${BUILD_SOURCESDIRECTORY}"
   git remote -v
+  git checkout -b master
   git branch
 
   git config --local user.email "my@email.com"
