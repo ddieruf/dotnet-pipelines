@@ -9,7 +9,6 @@ PIPELINE_RESOURCE="dotnet-pipelines"
 TASK_SCRIPTS_RESOURCE="${PIPELINE_RESOURCE}/scripts"
 SRC_AND_TEST_RESOURCE="src-and-test"
 
-env
 #######################################
 #       Initialize Task
 #######################################

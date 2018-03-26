@@ -10,8 +10,6 @@ PIPELINE_RESOURCE="dotnet-pipelines"
 TASK_SCRIPTS_RESOURCE="${PIPELINE_RESOURCE}/scripts"
 SRC_AND_TEST_RESOURCE="src-and-test"
 
-env
-
 #######################################
 #       Initialize Task
 #######################################
@@ -49,7 +47,6 @@ echo "##vso[task.setvariable variable=UNIT_TEST_ARTIFACT_NAME;isSecret=false;isO
 echo "##vso[task.setvariable variable=INTEGRATION_TEST_ARTIFACT_NAME;isSecret=false;isOutput=true;]${INTEGRATION_TEST_ARTIFACT_NAME}"
 echo "##vso[task.setvariable variable=SMOKE_TEST_ARTIFACT_NAME;isSecret=false;isOutput=true;]${SMOKE_TEST_ARTIFACT_NAME}"
 
-ls -l ${ARTIFACT_FOLDER_PATH}
 #add tag to repo
 #TAG="build/${PIPELINE_VERSION}"
 #echo "Tagging the project with build tag [${TAG}]"
