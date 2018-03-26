@@ -6,6 +6,8 @@ set -o errtrace
 
 #git clone "${BUILD_SOURCESDIRECTORY}" "${AGENT_WORKFOLDER}/src-and-test"
 pushd "${BUILD_SOURCESDIRECTORY}"
+  git remote -v
+
   git config --local user.email "my@email.com"
   git config --local user.name "My Name"
 
@@ -14,6 +16,7 @@ pushd "${BUILD_SOURCESDIRECTORY}"
 
   git add version
   git commit -m "Commit this file"
+  git push origin master
 popd
 
 ls -l "${BUILD_SOURCESDIRECTORY}"
