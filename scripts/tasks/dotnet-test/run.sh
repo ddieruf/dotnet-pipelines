@@ -36,6 +36,7 @@ case "${ARTIFACT_LOCATION_TYPE}" in
   "local")
     [[ ! -z "${ARTIFACT_FOLDER_PATH}" ]] || (echo "ARTIFACT_FOLDER_PATH is a required value" && exit 1)
     [[ -d "${ARTIFACT_FOLDER_PATH}" ]] || (echo "ARTIFACT_FOLDER_PATH path invalid [${ARTIFACT_FOLDER_PATH}]" && exit 1)
+    [[ -f "${ARTIFACT_FOLDER_PATH}/${TEST_ARTIFACT_NAME}" ]] || (echo "Artifact not found [${ARTIFACT_FOLDER_PATH}/${TEST_ARTIFACT_NAME}]" && exit 1)
     ;;
   "artifactory")
     [[ ! -z "${ARTIFACTORY_HOST}" ]] || (echo "ARTIFACTORY_HOST is a required value" && exit 1)

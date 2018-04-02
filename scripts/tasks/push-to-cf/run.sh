@@ -99,7 +99,7 @@ case "${ARTIFACT_LOCATION_TYPE}" in
 esac
 
 echo "Extracting artifact"
-extractAppArtifact "zip" "${SRC_ARTIFACT_NAME}" "${ROOT_FOLDER}/${TEST_EXTRACT}"
+extractAppArtifact "zip" "${THIS_FOLDER}/${TEST_ARTIFACT_NAME}" "${ROOT_FOLDER}/${TEST_EXTRACT}"
 if [[ $? -eq 1 ]]; then
   echo "ERROR: extractAppArtifact"
   exit 1
@@ -118,15 +118,13 @@ if [[ $? -eq 1 ]]; then
 fi
 
 echo "Pushing app to cloud foundry"
-cd "${ROOT_FOLDER}/${TEST_EXTRACT}" || exit 1
-
-deploy "${ENVIRONMENT_NAME}" "${PIPELINE_VERSION}"
-if [[ $? -eq 1 ]]; then
-  echo "ERROR: deploy"
-  exit 1
-fi
-
-cd "${ROOT_FOLDER}" || exit 1
+pushd "${ROOT_FOLDER}/${TEST_EXTRACT}"
+  deploy "${ENVIRONMENT_NAME}" "${PIPELINE_VERSION}"
+  if [[ $? -eq 1 ]]; then
+    echo "ERROR: deploy"
+    exit 1
+  fi
+popd
 
 #######################################
 #       Return result
