@@ -35,7 +35,8 @@ export TEST_EXTRACT="test-extract"
 case "${ARTIFACT_LOCATION_TYPE}" in
   "local")
     [[ ! -z "${ARTIFACT_FOLDER_PATH}" ]] || (echo "ARTIFACT_FOLDER_PATH is a required value" && exit 1)
-    [[ -f "${ARTIFACT_FOLDER_PATH}" ]] || (echo "ARTIFACT_FOLDER_PATH path invalid [${ARTIFACT_FOLDER_PATH}]" && exit 1)
+    [[ -d "${ARTIFACT_FOLDER_PATH}" ]] || (echo "ARTIFACT_FOLDER_PATH path invalid [${ARTIFACT_FOLDER_PATH}]" && exit 1)
+    [[ -f "${ARTIFACT_FOLDER_PATH}/${TEST_ARTIFACT_NAME}" ]] || (echo "Artifact not found [${ARTIFACT_FOLDER_PATH}/${TEST_ARTIFACT_NAME}]" && exit 1)
     ;;
   "artifactory")
     [[ ! -z "${ARTIFACTORY_HOST}" ]] || (echo "ARTIFACTORY_HOST is a required value" && exit 1)
@@ -75,7 +76,7 @@ case "${ARTIFACT_LOCATION_TYPE}" in
     ;;
   "artifactory")
     #download the zip to PWD
-    downloadAppArtifact "${ARTIFACTORY_HOST}" "${ARTIFACTORY_REPO_ID}" "${ARTIFACTORY_TOKEN}" "${TEST_ARTIFACT_NAME}"
+    downloadAppArtifact "${ARTIFACTORY_HOST}" "${ARTIFACTORY_REPO_ID}" "${ARTIFACTORY_TOKEN}" "${TEST_ARTIFACT_NAME}" "${THIS_FOLDER}"
     if [[ $? -eq 1 ]]; then
       echo "ERROR: downloadAppArtifact"
       exit 1
@@ -87,7 +88,7 @@ case "${ARTIFACT_LOCATION_TYPE}" in
 esac
 
 echo "Extracting artifact"
-extractAppArtifact "zip" "${TEST_ARTIFACT_NAME}" "${ROOT_FOLDER}/${TEST_EXTRACT}"
+extractAppArtifact "zip" "${THIS_FOLDER}/${TEST_ARTIFACT_NAME}" "${ROOT_FOLDER}/${TEST_EXTRACT}"
 if [[ $? -eq 1 ]]; then
   echo "ERROR: extractAppArtifact"
   exit 1

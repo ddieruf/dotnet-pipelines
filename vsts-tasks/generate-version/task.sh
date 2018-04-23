@@ -17,15 +17,14 @@ source "${ROOT_FOLDER}/${PIPELINE_RESOURCE}/functions/init-task.sh"
 #######################################
 #       Run Task
 #######################################
-export VERSION_ROOT="${ROOT_FOLDER}/${SRC_VERSION_RESOURCE}"
+export VERSION_ROOT="${ARTIFACT_ROOT}/${SRC_AND_TEST_RESOURCE}"
 #GIT_EMAIL
 #GIT_NAME
-source "${ROOT_FOLDER}/${TASK_SCRIPTS_RESOURCE}/tasks/generate-version/run.sh"
+source "${ARTIFACT_ROOT}/${TASK_SCRIPTS_RESOURCE}/tasks/generate-version/run.sh"
 
 echo "New version number: ${NEW_VERSION_NUMBER}"
 
-#add the new version number to keyval store
-export PASSED_PIPELINE_VERSION="${NEW_VERSION_NUMBER}"
+echo "##vso[task.setvariable variable=NEW_VERSION_NUMBER;isSecret=false;isOutput=true;]${NEW_VERSION_NUMBER}"
 
 #######################################
 #       Finalize task

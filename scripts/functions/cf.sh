@@ -27,7 +27,7 @@ function install(){
 		apt-transport-https
 
 	#Add the Cloud Foundry Foundation public key and package repository to your system
-	wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | apt-key add -
+	wget --no-check-certificate -qO - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | apt-key add -
 	echo "deb http://packages.cloudfoundry.org/debian stable main" | tee /etc/apt/sources.list.d/cloudfoundry-cli.list
 
 	apt-get update --quiet --assume-yes
