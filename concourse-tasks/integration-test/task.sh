@@ -18,10 +18,12 @@ source "${ROOT_FOLDER}/${CONCOURSE_TASKS_RESOURCE}/functions/init-task.sh"
 #######################################
 #       Run Task
 #######################################
+#ARTIFACT_LOCATION_TYPE
 #ARTIFACTORY_HOST
 #ARTIFACTORY_TOKEN
 #ARTIFACTORY_REPO_ID
 #DOTNET_VERSION
+
 export TEST_DLL_NAME="${INTEGRATION_TEST_DLL_NAME}"
 export TEST_ARTIFACT_NAME="${PASSED_INTEGRATION_TEST_ARTIFACT_NAME}"
 source "${ROOT_FOLDER}/${TASK_SCRIPTS_RESOURCE}/tasks/dotnet-test/run.sh"

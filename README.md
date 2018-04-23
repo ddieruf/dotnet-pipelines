@@ -24,7 +24,7 @@ Cloud Foundry cli: 6.33.1
 
 ### Design
 
-I have chosen to rely solely on bash scripts for task execution. I had mixed feelings about doing this, but felt it provided the best solution in the long run. An alternative to this would be, in TFS, to build out my sources to project dependencies (Artifactory, Sonar, etc etc) and then build every task individually in my release definition. Yes it's nice to have everything in the UI but you can only do what the given task has options for. And you are now totally reliant on that tool. Not good.
+I have chosen to rely solely on bash scripts for task execution. I had mixed feelings about doing this, but felt it provided the best solution in the long run. An alternative to this would be, in VSTS, to build out my sources to project dependencies (Artifactory, Sonar, etc etc) and then build every task individually in my release definition. Yes it's nice to have everything in the UI but you can only do what the given task has options for. And you are now totally reliant on that tool. Not good.
 
 I have chosen to start with a blank canvas (Linux OS) and let the given task build the environment and run it's script. Versatility, portability, and shareability. All things that are my friends. This design should keep quite a few doors open to the team
 - Maintainability (not tied to a certain project)
@@ -39,7 +39,7 @@ Note: The master branch is where I am doing development. While I [try] to never 
 
 #### Pipeline Scripts
 
-These scripts are used to define a given app's pipeline. In concourse each script would result in a different job. In a TFS release definition* each script would result in a different agent phase. Notice the directories are named for the given CI/CD tool. These tasks could possibly be specific to a given application's build needs and if they needed to live with the application source, it could be justifiable.
+These scripts are used to define a given app's pipeline. In concourse each script would result in a different job. In a VSTS release definition* each script would result in a different agent phase. Notice the directories are named for the given CI/CD tool. These tasks could possibly be specific to a given application's build needs and if they needed to live with the application source, it could be justifiable.
 
 *You can not use build definitions with this design. Because you didn't copy and paste the scripts directory in to your existing solution, your pipeline needs to reference multiple repos. Build definitions can only reference one repo.
 
@@ -63,7 +63,6 @@ In the given CI/CD tool folder, you will find specifics about installing (ie if 
 
 Some features and additions I am working on:
 - Windows workers in the pipeline
-- Save artifact to TFS instead of Artifactory
 - Powershell version of all script tasks
 - Additional task to do security scan using [Checkmarx](https://www.checkmarx.com/)
 

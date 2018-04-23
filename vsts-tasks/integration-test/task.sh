@@ -3,8 +3,10 @@
 set -o errexit
 set -o errtrace
 
-ROOT_FOLDER="${AGENT_RELEASEDIRECTORY}"
-TASK_SCRIPTS_RESOURCE="task-scripts"
+ROOT_FOLDER="${SYSTEM_ARTIFACTSDIRECTORY}"
+PIPELINE_RESOURCE="dotnet-pipelines"
+TASK_SCRIPTS_RESOURCE="${PIPELINE_RESOURCE}/scripts"
+
 
 #######################################
 #       Initialize Task
